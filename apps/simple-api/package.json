@@ -1,0 +1,13 @@
+{
+  "name": "simple-api",
+  "version": "1.0.0",
+  "description": "A simple Node.js/Express API for K8s learning",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

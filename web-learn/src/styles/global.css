@@ -1,0 +1,162 @@
+/* ==============================
+   Reset & Base
+   ============================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 92px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Source Serif 4', 'Source Serif Pro', 'Iowan Old Style', Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.62;
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--paper-rule) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-attachment: fixed;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+code,
+pre {
+  font-family: 'JetBrains Mono', ui-monospace, 'Consolas', monospace;
+}
+
+/* ==============================
+   Selection
+   ============================== */
+::selection {
+  background: var(--blueprint);
+  color: var(--bg);
+}
+
+/* ==============================
+   Skip Link
+   ============================== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 999;
+  padding: 8px 16px;
+  background: var(--blueprint);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==============================
+   Container
+   ============================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1240px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+/* ==============================
+   Section Padding
+   ============================== */
+.section-padding {
+  padding: 80px 0;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 48px 0;
+  }
+}
+
+/* ==============================
+   Font Utilities
+   ============================== */
+.font-display {
+  font-family: 'VT323', ui-monospace, 'JetBrains Mono', monospace;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, 'Consolas', monospace;
+}
+
+.font-serif {
+  font-family: 'Source Serif 4', 'Source Serif Pro', 'Iowan Old Style', Georgia, serif;
+}
+
+/* ==============================
+   Focus States
+   ============================== */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ==============================
+   Scrollbar (subtle)
+   ============================== */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rule-soft);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-mute);
+}

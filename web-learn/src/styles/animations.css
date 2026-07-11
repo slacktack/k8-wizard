@@ -1,0 +1,166 @@
+/* ==============================
+   Scroll Reveals
+   ============================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal--left {
+  transform: translateX(-20px);
+}
+
+.reveal--left.reveal--visible {
+  transform: none;
+}
+
+/* ==============================
+   Title Flicker
+   ============================== */
+@keyframes title-flicker {
+  0%, 100% { opacity: 1; }
+  18%  { opacity: 0.4; }
+  20%  { opacity: 1; }
+  62%  { opacity: 0.7; }
+  64%  { opacity: 1; }
+}
+
+.manual-title {
+  animation: title-flicker 2.4s ease-out 0.1s 1;
+}
+
+/* ==============================
+   Terminal Animations
+   ============================== */
+.terminal-window {
+  animation: terminalOpen 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes terminalOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* ==============================
+   TUI Panel Animations
+   ============================== */
+.tui-panel {
+  animation: tuiPanelOpen 0.15s ease;
+}
+
+@keyframes tuiPanelOpen {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tui-table-row:hover {
+  background: rgba(86, 182, 194, 0.06) !important;
+  transition: background 0.08s;
+}
+
+/* ==============================
+   Reduced Motion
+   ============================== */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .manual-title,
+  .terminal-window,
+  .tui-panel,
+  .cursor-blink {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .cursor-blink {
+    display: none !important;
+  }
+}
+
+/* ==============================
+   Responsive
+   ============================== */
+@media (max-width: 1024px) {
+  .playground-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-nav a:not(:last-child) {
+    display: none;
+  }
+
+  .preface-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .preface-body {
+    column-count: 1 !important;
+  }
+
+  section {
+    padding: 48px 0 !important;
+  }
+
+  .playground-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+
+  .logo {
+    font-size: 1rem !important;
+  }
+
+  .terminal-window {
+    font-size: 0.78rem !important;
+  }
+
+  .tui-panel {
+    font-size: 0.82rem !important;
+  }
+
+  .playground-grid {
+    min-height: 300px;
+  }
+}
+
+/* ==============================
+   Print Styles
+   ============================== */
+@media print {
+  .site-header,
+  .skip-link,
+  .playground-section {
+    display: none !important;
+  }
+}

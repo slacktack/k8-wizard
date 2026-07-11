@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K8s Demo App</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a; color: #e2e8f0;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; line-height: 1.6;
+    }
+    .container { max-width: 600px; width: 100%; padding: 2rem; }
+    h1 { color: #38bdf8; font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .subtitle { color: #94a3b8; margin-bottom: 2rem; font-size: 0.9rem; }
+    .card {
+      background: #1e293b; border-radius: 12px; padding: 1.5rem;
+      margin-bottom: 1rem; border: 1px solid #334155;
+    }
+    .card h3 { color: #38bdf8; margin-bottom: 0.5rem; }
+    pre {
+      background: #0f172a; padding: 1rem; border-radius: 8px;
+      overflow-x: auto; font-size: 0.85rem; color: #a5f3fc;
+      margin-top: 0.5rem;
+    }
+    .status-dot {
+      display: inline-block; width: 10px; height: 10px;
+      border-radius: 50%; margin-right: 8px;
+    }
+    .status-dot.ok { background: #22c55e; }
+    .status-dot.error { background: #ef4444; }
+    .status-dot.loading { background: #f59e0b; animation: pulse 1s infinite; }
+    @keyframes pulse { 50% { opacity: 0.3; } }
+    button {
+      background: #38bdf8; color: #0f172a; border: none;
+      padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600;
+      cursor: pointer; margin-right: 0.5rem; margin-top: 0.5rem;
+    }
+    button:hover { background: #7dd3fc; }
+    button.secondary { background: #475569; color: #e2e8f0; }
+    button.secondary:hover { background: #64748b; }
+    .error-text { color: #ef4444; font-size: 0.85rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>☸️ K8s Demo App</h1>
+    <p class="subtitle">A frontend talking to your Kubernetes backend</p>
+
+    <div class="card">
+      <h3><span class="status-dot" id="apiDot">●</span> Backend API Status</h3>
+      <pre id="apiStatus">Checking...</pre>
+    </div>
+
+    <div class="card">
+      <h3>Actions</h3>
+      <button onclick="fetchHealth()">Check Health</button>
+      <button onclick="fetchUsers()">Get Users</button>
+      <button onclick="stressCPU()" class="secondary">🔥 Stress CPU</button>
+      <button onclick="fetchEnv()">Check Config</button>
+      <div id="actionResult" style="margin-top: 1rem;"></div>
+    </div>
+
+    <div class="card">
+      <h3>Pod Info</h3>
+      <pre id="podInfo">Loading...</pre>
+    </div>
+  </div>
+
+  <script>
+    // Update this to your backend service URL
+    const API_URL = process.env.API_URL || 'http://backend-api';
+
+    async function apiCall(endpoint) {
+      const resultEl = document.getElementById('actionResult');
+      const dot = document.getElementById('apiDot');
+      resultEl.innerHTML = '<span class="status-dot loading">●</span> Loading...';
+      dot.className = 'status-dot loading';
+
+      try {
+        const res = await fetch(`${API_URL}${endpoint}`);
+        const data = await res.json();
+        dot.className = 'status-dot ok';
+        resultEl.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+      } catch (err) {
+        dot.className = 'status-dot error';
+        resultEl.innerHTML = `<div class="error-text">Error: ${err.message}</div>`;
+      }
+    }
+
+    async function fetchHealth() {
+      const el = document.getElementById('apiStatus');
+      const dot = document.getElementById('apiDot');
+      try {
+        const res = await fetch(`${API_URL}/health`);
+        const data = await res.json();
+        el.textContent = JSON.stringify(data, null, 2);
+        dot.className = 'status-dot ok';
+      } catch (err) {
+        el.textContent = `Error: ${err.message}`;
+        dot.className = 'status-dot error';
+      }
+    }
+
+    async function fetchUsers() { await apiCall('/api/users'); }
+    async function stressCPU() { await apiCall('/api/cpu-stress?ms=2000'); }
+    async function fetchEnv() { await apiCall('/env'); }
+
+    // Get pod info (hostname)
+    async function loadPodInfo() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        document.getElementById('podInfo').textContent =
+          `Backend Pod: ${data.hostname}\n` +
+          `Version: ${data.message}\n` +
+          `Request Count: ${data.requestCount}`;
+      } catch (err) {
+        document.getElementById('podInfo').textContent = `Error: ${err.message}`;
+      }
+    }
+
+    fetchHealth();
+    loadPodInfo();
+    setInterval(fetchHealth, 10000);
+    setInterval(loadPodInfo, 5000);
+  </script>
+</body>
+</html>

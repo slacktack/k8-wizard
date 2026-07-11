@@ -1,0 +1,6 @@
+# simple-api/.dockerignore
+node_modules
+.git
+*.md
+.env
+.DS_Store
