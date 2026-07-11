@@ -56,25 +56,25 @@ docker --version && kind version && kubectl version --client
 ## Architecture
 
 ```
-  +------------------+          +--------------------+
-  |   Docker CLI     |          |     kubectl        |
-  +--------+---------+          +---------+----------+
-           |                              |
-           v                              v
-  +--------------------------------------------+
-  |           Docker Daemon (dockerd)           |
-  |                                              |
-  |  +--------+ +--------+ +-----------------+  |
-  |  | ctr 1  | | ctr 2  | |  Kind Node      |  |
-  |  +--------+ +--------+ |  (Docker ctr)    |  |
-  |                         |  +-----------+  |  |
-  |                         |  | kubelet   |  |  |
-  |                         |  | kube-apiserver | |
-  |                         |  | etcd      |  |  |
-  |                         |  | Pods      |  |  |
-  |                         |  +-----------+  |  |
-  |                         +-----------------+  |
-  +----------------------------------------------+
+  +-------------------+         +-------------------+
+  |    Docker CLI     |         |     kubectl       |
+  +--------+----------+         +---------+---------+
+           |                             |
+           v                             v
+  +-----------------------------------------------+
+  |          Docker Daemon (dockerd)               |
+  |                                                 |
+  |  +--------+  +--------+  +-------------------+ |
+  |  | ctr 1  |  | ctr 2  |  |   Kind Node      | |
+  |  +--------+  +--------+  |  (Docker ctr)     | |
+  |                          |  +---------------+ | |
+  |                          |  | kubelet       | | |
+  |                          |  | kube-apiserver| | |
+  |                          |  | etcd          | | |
+  |                          |  | Pods          | | |
+  |                          |  +---------------+ | |
+  |                          +-------------------+ |
+  +-----------------------------------------------+
 ```
 
 Kind creates Kubernetes clusters where every node (control-plane + workers) runs as a Docker container with `kubelet`, `kube-apiserver`, `etcd`, and `containerd` inside.
