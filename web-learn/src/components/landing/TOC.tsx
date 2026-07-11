@@ -11,7 +11,6 @@ export default function TOC() {
   const { isCompleted } = useProgress();
   const [activePhase, setActivePhase] = useState<string | null>(null);
 
-  // Close on Escape
   useEffect(() => {
     function handleEsc(e: KeyboardEvent) {
       if (e.key === 'Escape') setActivePhase(null);
@@ -33,40 +32,14 @@ export default function TOC() {
   return (
     <section className="section-padding" id="curriculum">
       <div className="container" ref={ref}>
-        {/* Section Header */}
-        <h2
-          style={{
-            fontFamily: "'VT323', monospace",
-            fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
-            color: 'var(--blueprint)',
-            marginBottom: 8,
-          }}
-        >
+        <h2 style={{ fontFamily: "'VT323', monospace", fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', color: 'var(--blueprint)', marginBottom: 8 }}>
           Curriculum
         </h2>
-        <p
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: '0.85rem',
-            color: 'var(--ink-mute)',
-            textTransform: 'uppercase',
-            marginBottom: 24,
-          }}
-        >
-          8 Phases · 58 Lessons · Beginner → Wizard
+        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', color: 'var(--ink-mute)', textTransform: 'uppercase', marginBottom: 24 }}>
+          10 Phases · 70 Lessons · Beginner → Wizard
         </p>
 
-        {/* Legend */}
-        <div
-          style={{
-            display: 'flex',
-            gap: 16,
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: '0.72rem',
-            textTransform: 'uppercase',
-            marginBottom: 32,
-          }}
-        >
+        <div style={{ display: 'flex', gap: 16, fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', textTransform: 'uppercase', marginBottom: 32 }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <StatusDot status="complete" /> Complete
           </span>
@@ -78,7 +51,6 @@ export default function TOC() {
           </span>
         </div>
 
-        {/* Phase Rows */}
         {PHASES.map((phase, i) => {
           const phaseStatus = getPhaseStatus(phase.id);
           const completedCount = phase.lessonIds.filter(id => isCompleted(id)).length;
@@ -91,71 +63,40 @@ export default function TOC() {
               tabIndex={0}
               aria-label={`Open ${phase.title} phase`}
               onKeyDown={e => { if (e.key === 'Enter') setActivePhase(phase.id); }}
+              className="phase-row"
               style={{
                 display: 'grid',
-                gridTemplateColumns: '48px 1fr 80px 100px',
+                gridTemplateColumns: '60px 1fr 80px 100px',
                 gap: 16,
                 alignItems: 'center',
                 padding: '16px 0',
-                borderBottom: '1px solid var(--rule-soft)',
+                borderBottom: '1px solid var(--rule)',
                 cursor: 'pointer',
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(8px)',
-                transition: `opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)`,
-                transitionDelay: `${i * 0.06}s`,
+                transition: `opacity 0.5s ease, transform 0.5s var(--ease-smooth)`,
+                transitionDelay: `${i * 0.05}s`,
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'var(--blueprint-tint)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
-              {/* Phase Number */}
-              <span
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: '0.78rem',
-                  color: 'var(--blueprint)',
-                }}
-              >
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', color: 'var(--blueprint)' }}>
                 {String(phase.number).padStart(2, '0')}
               </span>
 
-              {/* Title */}
-              <span
-                style={{
-                  fontFamily: "'VT323', monospace",
-                  fontSize: 'clamp(1rem, 2vw, 1.4rem)',
-                  color: 'var(--ink)',
-                }}
-              >
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '1rem', color: 'var(--ink)', fontWeight: 500 }}>
                 {phase.title}
               </span>
 
-              {/* Lesson Count */}
-              <span
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: '0.72rem',
-                  color: 'var(--ink-mute)',
-                  textAlign: 'right',
-                }}
-              >
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.78rem', color: 'var(--ink-mute)', textAlign: 'right', minWidth: 48, fontVariantNumeric: 'tabular-nums' }}>
                 {completedCount}/{phase.lessonIds.length}
               </span>
 
-              {/* Status Dots */}
               <div style={{ display: 'flex', gap: 4, alignItems: 'center', justifyContent: 'flex-end' }}>
-                {phase.lessonIds.map((id, j) => (
-                  <StatusDot
-                    key={id}
-                    status={
-                      isCompleted(id)
-                        ? 'complete'
-                        : phaseStatus === 'in-progress' && j <= completedCount
-                        ? 'in-progress'
-                        : 'planned'
-                    }
-                    size={10}
-                  />
-                ))}
+                {phase.lessonIds.map((id, j) => {
+                  const dotStatus = isCompleted(id) ? 'complete' : phaseStatus === 'in-progress' && j <= completedCount ? 'in-progress' : 'planned';
+                  return (
+                    <StatusDot key={id} status={dotStatus} size={10} />
+                  );
+                })}
               </div>
             </div>
           );
@@ -163,7 +104,6 @@ export default function TOC() {
 
         <AsciiRule />
 
-        {/* Phase Modal */}
         {activePhase && (
           <PhaseModal phaseId={activePhase} onClose={() => setActivePhase(null)} />
         )}

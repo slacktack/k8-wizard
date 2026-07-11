@@ -1,7 +1,7 @@
 import CopyButton from '../ui/CopyButton';
 
 export default function Colophon() {
-  const cloneCmd = 'git clone https://github.com/tushargautam/K8-docker-learn.git';
+  const cloneCmd = 'git clone https://github.com/slacktack/k8-wizard.git';
 
   return (
     <section className="section-padding">

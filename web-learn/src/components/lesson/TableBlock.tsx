@@ -7,8 +7,10 @@ export default function TableBlock({ headers, rows }: TableBlockProps) {
   return (
     <div
       style={{
-        margin: '16px 0',
+        margin: '24px 0',
         overflowX: 'auto',
+        width: '100%',
+        maxWidth: '100%',
       }}
     >
       <table
@@ -27,7 +29,7 @@ export default function TableBlock({ headers, rows }: TableBlockProps) {
                 key={i}
                 style={{
                   textAlign: 'left',
-                  padding: '8px 12px',
+                  padding: '10px 14px',
                   textTransform: 'uppercase',
                   color: 'var(--ink)',
                   fontWeight: 500,

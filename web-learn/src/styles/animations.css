@@ -1,24 +1,33 @@
 /* ==============================
+   K8 Wizard — Animations v2.1
+   ============================== */
+
+/* --- Easing Classes --- */
+.ease-smooth { transition-timing-function: var(--ease-smooth); }
+.ease-snappy { transition-timing-function: var(--ease-snappy); }
+.ease-bounce { transition-timing-function: var(--ease-bounce); }
+
+/* ==============================
    Scroll Reveals
    ============================== */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.6s var(--ease-smooth),
+              transform 0.6s var(--ease-smooth);
 }
 
-.reveal--visible {
+.reveal.in-view {
   opacity: 1;
-  transform: none;
+  transform: translateY(0);
 }
 
 .reveal--left {
   transform: translateX(-20px);
 }
 
-.reveal--left.reveal--visible {
-  transform: none;
+.reveal--left.in-view {
+  transform: translateX(0);
 }
 
 /* ==============================
@@ -40,18 +49,12 @@
    Terminal Animations
    ============================== */
 .terminal-window {
-  animation: terminalOpen 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: terminalOpen 0.3s var(--ease-smooth);
 }
 
 @keyframes terminalOpen {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @keyframes cursor-blink {
@@ -63,8 +66,172 @@
   animation: cursor-blink 1s step-end infinite;
 }
 
+@keyframes cursor-fade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.cursor-fade {
+  animation: cursor-fade 0.3s ease forwards;
+}
+
+/* Output line reveal */
+.terminal-output-line {
+  opacity: 0;
+  transform: translateY(4px);
+  animation: outputReveal 0.2s var(--ease-smooth) forwards;
+}
+
+@keyframes outputReveal {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ==============================
-   TUI Panel Animations
+   Button Micro-interactions
+   ============================== */
+.btn {
+  position: relative;
+  transition: transform 0.15s var(--ease-snappy),
+              box-shadow 0.15s var(--ease-snappy),
+              background 0.15s var(--ease-snappy),
+              color 0.15s var(--ease-snappy),
+              border-color 0.15s var(--ease-snappy);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+  transition-duration: 0.05s;
+}
+
+/* ==============================
+   Nav Link Underline Animation
+   ============================== */
+.nav-link {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--blueprint);
+  transition: width 0.2s var(--ease-snappy);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* ==============================
+   Logo Icon Pulse
+   ============================== */
+.logo-icon {
+  transition: transform 0.2s var(--ease-bounce);
+}
+
+.logo-icon:hover {
+  transform: scale(1.1);
+}
+
+/* ==============================
+   Phase Row Hover
+   ============================== */
+.phase-row {
+  transition: background 0.15s, transform 0.15s var(--ease-snappy);
+}
+
+.phase-row:hover {
+  background: var(--blueprint-tint);
+  transform: translateX(4px);
+}
+
+/* ==============================
+   Status Dot Pulse (in-progress)
+   ============================== */
+@keyframes dot-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--blueprint-tint-strong); }
+  50% { box-shadow: 0 0 0 6px transparent; }
+}
+
+.status-dot-in-progress {
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+/* ==============================
+   Status Dot Complete (pop)
+   ============================== */
+@keyframes dot-pop {
+  0%   { transform: scale(0.8); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.status-dot-complete {
+  animation: dot-pop 0.3s var(--ease-bounce);
+}
+
+/* ==============================
+   Toast Notifications
+   ============================== */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(8px); }
+}
+
+.toast-enter {
+  animation: toast-in 0.3s var(--ease-bounce);
+}
+
+.toast-exit {
+  animation: toast-out 0.2s ease forwards;
+}
+
+/* ==============================
+   Modal Entry
+   ============================== */
+@keyframes modalEntry {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-entry {
+  animation: modalEntry 0.25s var(--ease-smooth);
+}
+
+/* ==============================
+   Command Palette
+   ============================== */
+@keyframes paletteEntry {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.palette-entry {
+  animation: paletteEntry 0.16s var(--ease-snappy);
+}
+
+/* ==============================
+   TUI Panel
    ============================== */
 .tui-panel {
   animation: tuiPanelOpen 0.15s ease;
@@ -81,6 +248,18 @@
 }
 
 /* ==============================
+   Architecture UML Lines
+   ============================== */
+.uml-line {
+  stroke-dasharray: 8 4;
+  animation: umlDash 0.5s linear infinite;
+}
+
+@keyframes umlDash {
+  to { stroke-dashoffset: -12; }
+}
+
+/* ==============================
    Reduced Motion
    ============================== */
 @media (prefers-reduced-motion: reduce) {
@@ -88,7 +267,12 @@
   .manual-title,
   .terminal-window,
   .tui-panel,
-  .cursor-blink {
+  .cursor-blink,
+  .btn,
+  .logo-icon,
+  .phase-row,
+  .status-dot-in-progress,
+  .status-dot-complete {
     transition: none !important;
     animation: none !important;
     opacity: 1 !important;
@@ -97,6 +281,12 @@
 
   .cursor-blink {
     display: none !important;
+  }
+
+  .hero-stagger {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
 
@@ -129,6 +319,31 @@
 
   .playground-grid {
     grid-template-columns: 1fr !important;
+  }
+
+  .lesson-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .lesson-sidebar {
+    position: static !important;
+    max-height: none !important;
+  }
+
+  .mini-progress-bar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .mini-progress-bar .progress-text {
+    font-size: 0.65rem;
+  }
+
+  .mini-progress-bar .progress-title {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

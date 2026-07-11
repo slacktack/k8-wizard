@@ -12,6 +12,7 @@ export interface Phase {
 }
 
 export type LessonType = 'learn' | 'build' | 'capstone';
+export type Difficulty = 'beginner' | 'intermediate' | 'advanced' | 'expert';
 
 export type LessonSection =
   | { type: 'text'; body: string }
@@ -21,6 +22,7 @@ export type LessonSection =
   | { type: 'code'; language: string; code: string }
   | { type: 'table'; headers: string[]; rows: string[][] }
   | { type: 'diagram'; lines: string[] }
+  | { type: 'uml'; preset: string; title?: string }
   | { type: 'note'; body: string }
   | { type: 'warning'; body: string };
 
@@ -30,6 +32,7 @@ export interface Lesson {
   number: number;
   title: string;
   type: LessonType;
+  difficulty: Difficulty;
   duration: string;
   sections: LessonSection[];
   commands?: string[];

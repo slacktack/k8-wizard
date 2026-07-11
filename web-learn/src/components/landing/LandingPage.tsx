@@ -6,8 +6,15 @@ import StatBlock from './StatBlock';
 import TOC from './TOC';
 import K8Playground from '../playground/K8Playground';
 import Colophon from './Colophon';
+import OnboardingModal from '../ui/OnboardingModal';
+import FloatingWizardButton from '../ui/FloatingWizardButton';
 
 export default function LandingPage() {
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <Header />
@@ -20,6 +27,11 @@ export default function LandingPage() {
         <Colophon />
       </main>
       <Footer />
+      <OnboardingModal
+        onStartCurriculum={() => scrollTo('curriculum')}
+        onTryPlayground={() => scrollTo('playground')}
+      />
+      <FloatingWizardButton />
     </>
   );
 }

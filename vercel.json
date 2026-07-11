@@ -1,0 +1,9 @@
+{
+  "framework": "vite",
+  "buildCommand": "cd web-learn && npm install && npm run build",
+  "outputDirectory": "web-learn/dist",
+  "installCommand": "cd web-learn && npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

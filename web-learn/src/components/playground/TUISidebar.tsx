@@ -21,51 +21,8 @@ export default function TUISidebar({ steps, onRun, onReset, canRun }: TUISidebar
 
   return (
     <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* Status Panel */}
-      <TUIPanel title="Cluster Status">
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.82rem' }}>
-          {[
-            { label: 'Context', value: 'kind-learn', color: 'var(--tui-green)' },
-            { label: 'Namespace', value: 'default', color: 'var(--tui-text)' },
-            { label: 'Nodes', value: '3 Ready', color: 'var(--tui-green)' },
-            { label: 'Pods', value: `${doneCount} running`, color: 'var(--tui-cyan)' },
-          ].map(item => (
-            <div key={item.label} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 8, marginBottom: 4 }}>
-              <span style={{ color: 'var(--tui-cyan)', textAlign: 'right' }}>{item.label}:</span>
-              <span style={{ color: item.color }}>{item.value}</span>
-            </div>
-          ))}
-        </div>
-      </TUIPanel>
-
-      {/* K8 Architecture Viz */}
-      <TUIPanel title="Architecture">
-        <K8VizDiagram />
-      </TUIPanel>
-
-      {/* Step Progress Panel */}
-      <TUIPanel title="Steps">
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75rem' }}>
-          {steps.map((step) => (
-            <div
-              key={step.id}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '4px 0',
-                color: step.done ? 'var(--tui-green)' : step.current ? 'var(--tui-cyan)' : 'var(--tui-mute)',
-              }}
-            >
-              <span>{step.done ? '✓' : step.current ? '▸' : '○'}</span>
-              <span>{step.title}</span>
-            </div>
-          ))}
-        </div>
-      </TUIPanel>
-
-      {/* Control Panel */}
-      <TUIPanel>
+      {/* CONTROLS ON TOP — Run/Reset at the top of sidebar */}
+      <TUIPanel title="Controls">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <button
             onClick={onRun}
@@ -74,13 +31,16 @@ export default function TUISidebar({ steps, onRun, onReset, canRun }: TUISidebar
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '0.78rem',
               textTransform: 'uppercase',
-              padding: '8px 16px',
+              letterSpacing: '0.08em',
+              padding: '10px 16px',
               border: '1px solid var(--tui-border)',
-              background: canRun ? 'var(--tui-cyan)' : 'transparent',
-              color: canRun ? 'var(--tui-bg)' : 'var(--tui-mute)',
+              background: canRun ? 'var(--blueprint)' : 'transparent',
+              color: canRun ? 'var(--bg)' : 'var(--ink-mute)',
               cursor: canRun ? 'pointer' : 'not-allowed',
               transition: 'background 0.1s',
             }}
+            onMouseEnter={e => { if (canRun) e.currentTarget.style.background = 'var(--blueprint-bright)'; }}
+            onMouseLeave={e => { if (canRun) e.currentTarget.style.background = 'var(--blueprint)'; }}
           >
             {canRun ? `▶ Run: ${steps.find(s => s.current)?.title || 'Complete'}` : '✓ All Steps Complete'}
           </button>
@@ -90,19 +50,65 @@ export default function TUISidebar({ steps, onRun, onReset, canRun }: TUISidebar
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '0.78rem',
               textTransform: 'uppercase',
-              padding: '8px 16px',
+              letterSpacing: '0.08em',
+              padding: '10px 16px',
               border: '1px solid var(--tui-border)',
               background: 'transparent',
               color: 'var(--tui-text)',
               cursor: 'pointer',
+              transition: 'color 0.1s, border-color 0.1s',
             }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--terminal-red)'; e.currentTarget.style.borderColor = 'var(--terminal-red)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--tui-text)'; e.currentTarget.style.borderColor = 'var(--tui-border)'; }}
           >
             ↺ Reset
           </button>
         </div>
       </TUIPanel>
 
-      {/* Key Hints */}
+      {/* Status Panel */}
+      <TUIPanel title="Status">
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.82rem' }}>
+          {[
+            { label: 'Step', value: `${doneCount}/${steps.length}`, color: 'var(--tui-cyan)' },
+            { label: 'Cluster', value: doneCount > 0 ? 'kind-learn' : '—', color: doneCount > 0 ? 'var(--tui-green)' : 'var(--ink-mute)' },
+            { label: 'Namespace', value: doneCount >= 4 ? 'demo' : '—', color: doneCount >= 4 ? 'var(--tui-text)' : 'var(--ink-mute)' },
+            { label: 'Pods', value: doneCount >= 6 ? '3 running' : '—', color: doneCount >= 6 ? 'var(--tui-green)' : 'var(--ink-mute)' },
+          ].map(item => (
+            <div key={item.label} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 8, marginBottom: 4 }}>
+              <span style={{ color: 'var(--tui-cyan)', textAlign: 'right' }}>{item.label}:</span>
+              <span style={{ color: item.color }}>{item.value}</span>
+            </div>
+          ))}
+        </div>
+      </TUIPanel>
+
+      {/* Steps */}
+      <TUIPanel title="Steps">
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', maxHeight: 220, overflowY: 'auto' }}>
+          {steps.map((step) => (
+            <div
+              key={step.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '3px 0',
+                color: step.done ? 'var(--tui-green)' : step.current ? 'var(--blueprint)' : 'var(--ink-mute)',
+              }}
+            >
+              <span style={{ flexShrink: 0, width: 14 }}>{step.done ? '✓' : step.current ? '▸' : '○'}</span>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{step.title}</span>
+            </div>
+          ))}
+        </div>
+      </TUIPanel>
+
+      {/* Architecture */}
+      <TUIPanel title="Architecture">
+        <K8VizDiagram />
+      </TUIPanel>
+
       <TUIKeyHints hints={[
         { key: 'Run', description: 'Execute Step' },
         { key: 'Tab', description: 'Focus Terminal' },

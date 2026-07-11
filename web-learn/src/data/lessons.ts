@@ -10,6 +10,7 @@ export const LESSONS: Record<string, Lesson> = {
     number: 1,
     title: 'Core Concepts',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'Docker packages your application and its dependencies into a container image — a single portable artifact that runs identically on your laptop, your coworker\'s machine, a server, or the cloud.' },
@@ -39,6 +40,7 @@ export const LESSONS: Record<string, Lesson> = {
     number: 2,
     title: 'Your First Dockerfile',
     type: 'build',
+    difficulty: 'beginner',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'Create a file called Dockerfile in an empty directory. This file describes how to build your container image.' },
@@ -72,6 +74,7 @@ CMD ["node", "server.js"]` },
     number: 3,
     title: 'The Dockerfile Instruction Set',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Every Dockerfile instruction has a specific purpose. Here\'s the complete set you\'ll use day-to-day.' },
@@ -106,6 +109,7 @@ CMD ["server.js"]   # \`docker run my-app\` runs "node server.js"
     number: 4,
     title: 'Multi-Stage Builds',
     type: 'build',
+    difficulty: 'beginner',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'The golden pattern for production images: build in one stage, copy artifacts to a minimal runtime stage. This drops image size from ~1GB to ~15MB.' },
@@ -135,6 +139,7 @@ CMD ["./server"]` },
     number: 5,
     title: 'Docker Networking',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Containers need to talk to each other and the outside world. Docker networking provides several driver options.' },
@@ -159,6 +164,7 @@ CMD ["./server"]` },
     number: 6,
     title: 'Volumes & Persistent Data',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Containers are ephemeral — when you delete one, its filesystem is gone. Volumes persist data outside the container.' },
@@ -182,6 +188,7 @@ CMD ["./server"]` },
     number: 7,
     title: 'Docker Compose',
     type: 'build',
+    difficulty: 'beginner',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'Docker Compose lets you define and run multi-service applications from a single YAML file.' },
@@ -222,6 +229,7 @@ volumes:
     number: 8,
     title: 'Docker Best Practices',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'heading', level: 2, text: 'Image Optimization' },
@@ -263,6 +271,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\
     number: 9,
     title: 'Common Commands Cheat Sheet',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '5 min',
     sections: [
       { type: 'text', body: 'Quick reference for the most common Docker commands.' },
@@ -289,6 +298,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\
     number: 1,
     title: 'The Problem Kubernetes Solves',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'Without Kubernetes, running containers in production means manually SSH-ing into servers to restart crashed containers, figuring out which server has free capacity, copy-pasting environment variables everywhere, relying on bash scripts you don\'t trust for zero-downtime deploys, and accepting that one server going down takes your app down.' },
@@ -303,6 +313,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\
     number: 2,
     title: 'What is Kind?',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Kind = Kubernetes in Docker. It creates a K8s cluster where every node (control-plane, worker) is a Docker container running kubelet, kube-apiserver, etcd, and containerd inside it.' },
@@ -348,6 +359,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\
     number: 3,
     title: 'Install & Create a Cluster',
     type: 'build',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'command', prompt: '$', cmd: 'brew install kind', output: '... kind installed' },
@@ -376,6 +388,7 @@ nodes:
     number: 4,
     title: 'Pods, Deployments & Services',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'The three core building blocks of Kubernetes applications.' },
@@ -456,6 +469,7 @@ spec:
     number: 5,
     title: 'ConfigMaps & Secrets',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'heading', level: 2, text: 'ConfigMap' },
@@ -507,6 +521,7 @@ data:
     number: 6,
     title: 'Your First App on Kubernetes',
     type: 'build',
+    difficulty: 'beginner',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'Let\'s deploy a real app end-to-end — a Deployment with a Service, then access it.' },
@@ -558,6 +573,7 @@ spec:
     number: 7,
     title: 'The kubectl CLI',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'kubectl is the command-line tool that controls your Kubernetes cluster.' },
@@ -583,6 +599,7 @@ spec:
     number: 8,
     title: 'Resource Requests & Limits',
     type: 'learn',
+    difficulty: 'beginner',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'Requests tell K8s the minimum resources needed (scheduling guarantee). Limits prevent a pod from using more than allowed (throttle/OOM prevention).' },
@@ -606,6 +623,7 @@ spec:
     number: 9,
     title: 'Hands-On: First App on K8s',
     type: 'capstone',
+    difficulty: 'beginner',
     duration: '25 min',
     sections: [
       { type: 'text', body: 'Create a Kind cluster, deploy an app, watch it self-heal, port-forward, and clean up.' },
@@ -670,6 +688,7 @@ spec:
     number: 1,
     title: 'Deployment Strategies',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '20 min',
     sections: [
       { type: 'heading', level: 2, text: 'RollingUpdate (Default)' },
@@ -735,6 +754,7 @@ spec:
     number: 2,
     title: 'Health Checks — The Three Probes',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'heading', level: 2, text: 'Liveness Probe' },
@@ -776,6 +796,7 @@ spec:
     number: 3,
     title: 'Graceful Shutdown',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'When K8s sends a SIGTERM to your pod, the app needs to: stop accepting new requests, finish in-flight requests, close DB connections, and exit cleanly.' },
@@ -808,6 +829,7 @@ process.on('SIGTERM', () => {
     number: 4,
     title: 'Environment Injection Patterns',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Three patterns for injecting configuration into pods.' },
@@ -862,6 +884,7 @@ spec:
     number: 5,
     title: 'Zero-Downtime Deployment',
     type: 'build',
+    difficulty: 'intermediate',
     duration: '20 min',
     sections: [
       { type: 'table', headers: ['Requirement', 'How'], rows: [
@@ -915,6 +938,7 @@ spec:
     number: 6,
     title: 'Kustomize for Environments',
     type: 'build',
+    difficulty: 'intermediate',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'Kustomize lets you define a base deployment and overlay environment-specific changes without repeating YAML.' },
@@ -957,6 +981,7 @@ replicas:
     number: 7,
     title: 'Debugging Deployments',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'heading', level: 3, text: 'Pod stuck in Pending' },
@@ -983,6 +1008,7 @@ replicas:
     number: 8,
     title: 'Complete Backend Deployment',
     type: 'capstone',
+    difficulty: 'intermediate',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'A production-ready backend deployment with health probes, env injection, resource limits, and a service.' },
@@ -1066,6 +1092,7 @@ spec:
     number: 1,
     title: 'CoreDNS — Service Discovery',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'Kubernetes runs CoreDNS as a cluster DNS service. Every service gets a DNS name following this pattern: <service>.<namespace>.svc.cluster.local' },
@@ -1085,6 +1112,7 @@ spec:
     number: 2,
     title: 'Service Types in Depth',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'heading', level: 2, text: 'ClusterIP (Default)' },
@@ -1143,6 +1171,7 @@ spec:
     number: 3,
     title: 'Headless Services',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'When you don\'t want load-balancing and need direct pod IPs (for stateful apps, service mesh, discovery).' },
@@ -1168,6 +1197,7 @@ Headless service: nslookup stateful-db → 10.244.1.5, 10.244.2.8 (direct pod IP
     number: 4,
     title: 'Ingress Controller',
     type: 'build',
+    difficulty: 'intermediate',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'A Service gives you one IP. Ingress gives you smart routing for HTTP/HTTPS — host-based and path-based routing.' },
@@ -1226,6 +1256,7 @@ nodes:
     number: 5,
     title: 'Gateway API',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'The Gateway API is the next-generation replacement for Ingress with role-based personas and protocol flexibility.' },
@@ -1268,6 +1299,7 @@ spec:
     number: 6,
     title: 'TLS & cert-manager',
     type: 'build',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'yaml', filename: 'tls-ingress.yaml', code: `apiVersion: networking.k8s.io/v1
@@ -1304,6 +1336,7 @@ spec:
     number: 7,
     title: 'Network Policies',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'By default, all pods can talk to all pods. Network policies restrict traffic between pods based on labels, namespaces, and IP blocks.' },
@@ -1351,6 +1384,7 @@ spec:
     number: 8,
     title: 'End-to-End Traffic Flow',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'The full path from a user\'s browser to a database pod.' },
@@ -1385,6 +1419,7 @@ spec:
     number: 1,
     title: 'Metrics Server',
     type: 'build',
+    difficulty: 'intermediate',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'The Metrics Server collects resource metrics (CPU/memory) from each node and pod. HPA and kubectl top depend on it.' },
@@ -1402,6 +1437,7 @@ spec:
     number: 2,
     title: 'HPA Based on CPU',
     type: 'build',
+    difficulty: 'intermediate',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'The Horizontal Pod Autoscaler automatically adjusts pod replicas based on observed CPU utilization.' },
@@ -1437,6 +1473,7 @@ spec:
     number: 3,
     title: 'HPA Custom Metrics & Memory',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Custom metrics like HTTP requests per second are the most reliable scaling signal for web services.' },
@@ -1496,6 +1533,7 @@ spec:
     number: 4,
     title: 'Vertical Pod Autoscaler',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'VPA sets resource requests automatically based on historical usage. Use when you don\'t know what resources your app needs.' },
@@ -1540,6 +1578,7 @@ spec:
     number: 5,
     title: 'Cluster Autoscaler',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'Adds nodes when pods can\'t be scheduled. Removes nodes when they\'re underutilized.' },
@@ -1563,6 +1602,7 @@ spec:
     number: 6,
     title: 'Load Testing',
     type: 'build',
+    difficulty: 'advanced',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'Test your cluster\'s scaling behavior with real load.' },
@@ -1604,6 +1644,7 @@ EOF` },
     number: 1,
     title: 'Volumes, PVCs & PVs',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'The Kubernetes storage stack: Pod → PVC → PV → StorageClass → Actual Storage.' },
@@ -1658,6 +1699,7 @@ spec:
     number: 2,
     title: 'StorageClasses',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '10 min',
     sections: [
       { type: 'command', prompt: '$', cmd: 'kubectl get storageclass', output: 'NAME                 PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE\nstandard (default)   rancher.io/local-path   Delete          WaitForFirstConsumer' },
@@ -1679,6 +1721,7 @@ allowVolumeExpansion: true` },
     number: 3,
     title: 'StatefulSets',
     type: 'learn',
+    difficulty: 'intermediate',
     duration: '15 min',
     sections: [
       { type: 'table', headers: ['Feature', 'Deployment', 'StatefulSet'], rows: [
@@ -1742,6 +1785,7 @@ spec:
     number: 4,
     title: 'PostgreSQL on Kubernetes',
     type: 'capstone',
+    difficulty: 'advanced',
     duration: '25 min',
     sections: [
       { type: 'text', body: 'Deploy a PostgreSQL database as a StatefulSet with persistent storage.' },
@@ -1831,6 +1875,7 @@ spec:
     number: 5,
     title: 'CSI Drivers',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'CSI (Container Storage Interface) is the standard plugin interface for storage vendors. Each cloud provider has a CSI driver.' },
@@ -1846,6 +1891,7 @@ spec:
     number: 6,
     title: 'Backup Strategies',
     type: 'build',
+    difficulty: 'advanced',
     duration: '15 min',
     sections: [
       { type: 'heading', level: 2, text: 'Velero (Standard Approach)' },
@@ -1877,6 +1923,7 @@ spec:
     number: 1,
     title: 'Prometheus & Grafana',
     type: 'build',
+    difficulty: 'advanced',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'The kube-prometheus-stack is the most popular monitoring setup, including Prometheus, Grafana, AlertManager, and node exporters.' },
@@ -1896,6 +1943,7 @@ spec:
     number: 2,
     title: 'Loki & Log Aggregation',
     type: 'build',
+    difficulty: 'advanced',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Loki stores logs, Promtail collects and pushes them. Query logs in Grafana using LogQL.' },
@@ -1936,6 +1984,7 @@ console.log(JSON.stringify({
     number: 3,
     title: 'OpenTelemetry & Tracing',
     type: 'build',
+    difficulty: 'advanced',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Distributed tracing shows the full path of a request across multiple services.' },
@@ -1993,6 +2042,7 @@ registerInstrumentations({
     number: 4,
     title: 'Alerting with AlertManager',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '15 min',
     sections: [
       { type: 'table', headers: ['Alert', 'Condition', 'Severity'], rows: [
@@ -2041,6 +2091,7 @@ spec:
     number: 5,
     title: 'Kubernetes Events',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '10 min',
     sections: [
       { type: 'text', body: 'K8s events tell you what happened in the cluster — scheduling, scaling, probe failures.' },
@@ -2057,6 +2108,7 @@ spec:
     number: 6,
     title: 'RED, USE & Golden Signals',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '10 min',
     sections: [
       { type: 'heading', level: 2, text: 'RED Method (For Services)' },
@@ -2091,6 +2143,7 @@ spec:
     number: 1,
     title: 'RBAC — Access Control',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '20 min',
     sections: [
       { type: 'text', body: 'RBAC controls who can do what in the cluster. Never give cluster-admin to applications or CI/CD pipelines.' },
@@ -2148,6 +2201,7 @@ roleRef:
     number: 2,
     title: 'Pod Security Standards',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '15 min',
     sections: [
       { type: 'table', headers: ['Level', 'What it enforces', 'Example'], rows: [
@@ -2187,6 +2241,7 @@ spec:
     number: 3,
     title: 'Resource Quotas & LimitRanges',
     type: 'learn',
+    difficulty: 'advanced',
     duration: '15 min',
     sections: [
       { type: 'text', body: 'Prevent one team/app from consuming all cluster resources.' },
@@ -2236,6 +2291,7 @@ spec:
     number: 4,
     title: 'Secrets Management',
     type: 'build',
+    difficulty: 'expert',
     duration: '20 min',
     sections: [
       { type: 'warning', body: 'K8s Secrets are NOT encrypted by default — they\'re base64-encoded in etcd. Use External Secrets, Sealed Secrets, or Vault for real security.' },
@@ -2269,6 +2325,7 @@ spec:
     number: 5,
     title: 'CI/CD & GitOps with ArgoCD',
     type: 'capstone',
+    difficulty: 'expert',
     duration: '25 min',
     sections: [
       { type: 'text', body: 'GitOps with ArgoCD is the modern standard: Git is the single source of truth, and ArgoCD syncs cluster state to match Git.' },
@@ -2342,6 +2399,7 @@ spec:
     number: 6,
     title: 'Cost Optimization',
     type: 'learn',
+    difficulty: 'expert',
     duration: '15 min',
     sections: [
       { type: 'heading', level: 2, text: 'Right-Sizing' },
@@ -2359,4 +2417,185 @@ spec:
     ],
     commands: ['kubectl top pods', 'eksctl create nodegroup --spot'],
   },
+
+  '09-01-daemonsets': {
+    id: '09-01-daemonsets',
+    phaseId: '09-advanced-workloads',
+    number: 1,
+    title: 'DaemonSets',
+    type: 'learn',
+    difficulty: 'advanced',
+    duration: '15 min',
+    sections: [
+      { type: 'text', body: 'A DaemonSet ensures all (or some) nodes run a copy of a pod. As nodes are added or removed, the DaemonSet automatically adds or removes pods. Common use cases: kube-proxy, CNI plugins, log collectors, monitoring agents.' },
+      { type: 'yaml', filename: 'daemonset.yaml', code: 'apiVersion: apps/v1\nkind: DaemonSet\nmetadata:\n  name: fluentd\nspec:\n  selector:\n    matchLabels:\n      app: fluentd\n  template:\n    metadata:\n      labels:\n        app: fluentd\n    spec:\n      containers:\n      - name: fluentd\n        image: fluent/fluentd:v1.16-debian\n        volumeMounts:\n        - name: varlog\n          mountPath: /var/log\n      volumes:\n      - name: varlog\n        hostPath:\n          path: /var/log' },
+      { type: 'command', prompt: '$', cmd: 'kubectl get daemonsets', output: 'NAME     DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   AGE\nfluentd  3         3         3       3            3           2m' },
+    ],
+    commands: ['kubectl get daemonsets'],
+  },
+  '09-02-jobs-cronjobs': {
+    id: '09-02-jobs-cronjobs',
+    phaseId: '09-advanced-workloads',
+    number: 2,
+    title: 'Jobs and CronJobs',
+    type: 'build',
+    difficulty: 'advanced',
+    duration: '20 min',
+    sections: [
+      { type: 'text', body: 'A Job creates pods that run to completion. A CronJob runs Jobs on a schedule. Jobs handle batch processing, data migration, and backups.' },
+      { type: 'yaml', filename: 'job.yaml', code: 'apiVersion: batch/v1\nkind: Job\nmetadata:\n  name: pi\nspec:\n  template:\n    spec:\n      containers:\n      - name: pi\n        image: perl:5.34\n        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]\n      restartPolicy: Never' },
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f job.yaml', output: 'job.batch/pi created' },
+      { type: 'yaml', filename: 'cronjob.yaml', code: 'apiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: daily-backup\nspec:\n  schedule: "0 2 * * *"\n  concurrencyPolicy: Forbid\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          containers:\n          - name: backup\n            image: alpine:3.19\n            command: ["sh", "-c", "tar czf /backup/data.tar.gz /data"]\n          restartPolicy: OnFailure' },
+    ],
+    commands: ['kubectl get jobs', 'kubectl create cronjob'],
+  },
+  '09-03-taints-tolerations': {
+    id: '09-03-taints-tolerations',
+    phaseId: '09-advanced-workloads',
+    number: 3,
+    title: 'Taints and Tolerations',
+    type: 'learn',
+    difficulty: 'advanced',
+    duration: '15 min',
+    sections: [
+      { type: 'text', body: 'Taints repel pods from nodes. Tolerations allow pods onto tainted nodes. Effects: NoSchedule (block new), PreferNoSchedule (soft block), NoExecute (evict existing).' },
+      { type: 'command', prompt: '$', cmd: 'kubectl taint nodes worker1 gpu=true:NoSchedule', output: 'node/worker1 tainted' },
+      { type: 'command', prompt: '$', cmd: 'kubectl taint nodes worker1 gpu=true:NoSchedule-', output: 'node/worker1 untainted' },
+    ],
+    commands: ['kubectl taint nodes'],
+  },
+  '09-04-topology-spread': {
+    id: '09-04-topology-spread',
+    phaseId: '09-advanced-workloads',
+    number: 4,
+    title: 'Topology Spread Constraints',
+    type: 'learn',
+    difficulty: 'advanced',
+    duration: '15 min',
+    sections: [
+      { type: 'text', body: 'Topology Spread Constraints control pod distribution across failure domains like zones and nodes. Essential for high availability across multiple availability zones.' },
+      { type: 'yaml', filename: 'deployment.yaml', code: 'apiVersion: apps/v1\nkind: Deployment\nspec:\n  template:\n    spec:\n      topologySpreadConstraints:\n      - maxSkew: 1\n        topologyKey: topology.kubernetes.io/zone\n        whenUnsatisfiable: DoNotSchedule\n        labelSelector:\n          matchLabels:\n            app: web' },
+    ],
+    commands: ['kubectl get nodes --show-labels'],
+  },
+  '09-05-priority-preemption': {
+    id: '09-05-priority-preemption',
+    phaseId: '09-advanced-workloads',
+    number: 5,
+    title: 'Priority Classes',
+    type: 'learn',
+    difficulty: 'advanced',
+    duration: '15 min',
+    sections: [
+      { type: 'text', body: 'Priority Classes define pod importance. When resources are scarce, the scheduler evicts lower-priority pods to make room for higher-priority ones.' },
+      { type: 'yaml', filename: 'priorityclass.yaml', code: 'apiVersion: scheduling.k8s.io/v1\nkind: PriorityClass\nmetadata:\n  name: high-priority\nvalue: 1000000\nglobalDefault: false' },
+      { type: 'command', prompt: '$', cmd: 'kubectl get priorityclasses', output: 'NAME                      VALUE        AGE\nhigh-priority             1000000      5m\nsystem-cluster-critical   2000000000   24h' },
+    ],
+    commands: ['kubectl get priorityclasses'],
+  },
+  '09-06-init-sidecar-ephemeral': {
+    id: '09-06-init-sidecar-ephemeral',
+    phaseId: '09-advanced-workloads',
+    number: 6,
+    title: 'Init, Sidecar and Ephemeral Containers',
+    type: 'build',
+    difficulty: 'expert',
+    duration: '20 min',
+    sections: [
+      { type: 'text', body: 'Init containers run before app containers start. Sidecar containers run alongside for logging or proxying. Ephemeral containers are temporary debug containers injected into running pods.' },
+      { type: 'yaml', filename: 'pod.yaml', code: 'apiVersion: v1\nkind: Pod\nmetadata:\n  name: with-init\nspec:\n  initContainers:\n  - name: wait-db\n    image: postgres:16-alpine\n    command: ["sh", "-c", "until pg_isready -h db; do sleep 2; done"]\n  containers:\n  - name: app\n    image: my-app' },
+      { type: 'command', prompt: '$', cmd: 'kubectl debug pod/my-pod -it --image=nicolaka/netshoot --copy-to=my-pod-debug' },
+    ],
+    commands: ['kubectl debug'],
+  },
+  '10-01-crds-operators': {
+    id: '10-01-crds-operators',
+    phaseId: '10-extending-k8s',
+    number: 1,
+    title: 'CRDs and Operators',
+    type: 'build',
+    difficulty: 'expert',
+    duration: '25 min',
+    sections: [
+      { type: 'text', body: 'CRDs extend the Kubernetes API with your own resource types. Operators automate operational knowledge into software.' },
+      { type: 'yaml', filename: 'crd.yaml', code: 'apiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: backups.example.com\nspec:\n  group: example.com\n  scope: Namespaced\n  names:\n    plural: backups\n    singular: backup\n    kind: Backup\n  versions:\n  - name: v1\n    served: true\n    storage: true\n    schema:\n      openAPIV3Schema:\n        type: object\n        properties:\n          spec:\n            type: object\n            properties:\n              source:\n                type: string\n              schedule:\n                type: string' },
+    ],
+    commands: ['kubectl get crds'],
+  },
+  '10-02-service-mesh': {
+    id: '10-02-service-mesh',
+    phaseId: '10-extending-k8s',
+    number: 2,
+    title: 'Service Mesh with Istio',
+    type: 'learn',
+    difficulty: 'expert',
+    duration: '20 min',
+    sections: [
+      { type: 'text', body: 'A service mesh adds transparent infrastructure for service-to-service communication. Istio provides traffic management, mTLS security, and observability.' },
+      { type: 'command', prompt: '$', cmd: 'istioctl install --set profile=demo', output: 'Istio core installed\nIstiod installed' },
+    ],
+    commands: ['istioctl install'],
+  },
+  '10-03-cilium-ebpf': {
+    id: '10-03-cilium-ebpf',
+    phaseId: '10-extending-k8s',
+    number: 3,
+    title: 'Cilium and eBPF',
+    type: 'learn',
+    difficulty: 'expert',
+    duration: '20 min',
+    sections: [
+      { type: 'text', body: 'Cilium is a CNI plugin powered by eBPF, providing networking, observability, and security without kernel modifications.' },
+      { type: 'command', prompt: '$', cmd: 'kubectl -n kube-system exec daemonset/cilium -- cilium status' },
+    ],
+    commands: ['cilium status'],
+  },
+  '10-04-kyverno-opa': {
+    id: '10-04-kyverno-opa',
+    phaseId: '10-extending-k8s',
+    number: 4,
+    title: 'Policy as Code',
+    type: 'learn',
+    difficulty: 'expert',
+    duration: '20 min',
+    sections: [
+      { type: 'text', body: 'Kyverno and OPA Gatekeeper enforce policies via admission controllers. Kyverno uses YAML; OPA uses Rego.' },
+      { type: 'yaml', filename: 'kyverno.yaml', code: 'apiVersion: kyverno.io/v1\nkind: ClusterPolicy\nmetadata:\n  name: require-labels\nspec:\n  validationFailureAction: Enforce\n  rules:\n  - name: check-labels\n    match:\n      resources:\n        kinds:\n        - Pod\n    validate:\n      message: "Owner label required"\n      pattern:\n        metadata:\n          labels:\n            owner: "?*"' },
+    ],
+    commands: ['kubectl apply -f kyverno-policy.yaml'],
+  },
+  '10-05-multi-cluster': {
+    id: '10-05-multi-cluster',
+    phaseId: '10-extending-k8s',
+    number: 5,
+    title: 'Multi-Cluster Patterns',
+    type: 'learn',
+    difficulty: 'expert',
+    duration: '20 min',
+    sections: [
+      { type: 'text', body: 'Organizations adopt multiple clusters for isolation, geography, and compliance. Tools include Cilium ClusterMesh, Karmada, and ArgoCD ApplicationSets.' },
+      { type: 'table', headers: ['Pattern', 'Tool', 'Use Case'], rows: [
+        ['Federation', 'Karmada', 'Unified control plane'],
+        ['Multi-cluster networking', 'Cilium ClusterMesh', 'Pod-to-pod across clusters'],
+        ['GitOps multi-cluster', 'ArgoCD AppSet', 'Deploy to many clusters'],
+      ]},
+    ],
+    commands: ['kubectl config get-contexts'],
+  },
+  '10-06-k8s-api-deep-dive': {
+    id: '10-06-k8s-api-deep-dive',
+    phaseId: '10-extending-k8s',
+    number: 6,
+    title: 'Kubernetes API Deep Dive',
+    type: 'learn',
+    difficulty: 'expert',
+    duration: '20 min',
+    sections: [
+      { type: 'text', body: 'Every kubectl command is an HTTP request to the API server. Understanding API versioning, deprecation policy, and watch semantics is essential.' },
+      { type: 'command', prompt: '$', cmd: 'kubectl api-resources' },
+      { type: 'command', prompt: '$', cmd: 'kubectl api-versions' },
+    ],
+    commands: ['kubectl api-resources', 'kubectl api-versions'],
+  },
+
 };

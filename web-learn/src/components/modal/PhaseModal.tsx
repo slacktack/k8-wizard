@@ -81,8 +81,8 @@ function ModalPanel({ phase, lessons, onClose }: { phase: typeof PHASES[0]; less
         {phase.description}
       </p>
 
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: '1px solid var(--blueprint)', background: 'var(--blueprint-tint)', padding: '4px 10px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', textTransform: 'uppercase', marginBottom: 16 }}>
-        {completed}/{lessons.length} · {pct}%
+      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, border: '1px solid var(--blueprint)', background: 'var(--blueprint-tint)', padding: '4px 10px', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', textTransform: 'uppercase', marginBottom: 16, fontVariantNumeric: 'tabular-nums' }}>
+        <span style={{ minWidth: 28, textAlign: 'right' }}>{completed}</span>/{lessons.length} <span style={{ minWidth: 32 }}>· {pct}%</span>
       </div>
 
       <div style={{ height: 4, background: 'var(--rule-soft)', marginBottom: 24 }}>

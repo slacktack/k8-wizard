@@ -10,10 +10,12 @@ export default function CommandBlock({ prompt, cmd, output }: CommandBlockProps)
   return (
     <div
       style={{
-        margin: '16px 0',
+        margin: '24px 0',
         border: '1px solid var(--terminal-border)',
         background: 'var(--terminal-bg)',
         overflow: 'hidden',
+        width: '100%',
+        maxWidth: '100%',
       }}
     >
       {/* Terminal Chrome */}
@@ -45,6 +47,9 @@ export default function CommandBlock({ prompt, cmd, output }: CommandBlockProps)
             color: 'var(--terminal-text)',
             display: 'block',
             marginBottom: output ? 8 : 0,
+            width: '100%',
+            maxWidth: '100%',
+            overflowWrap: 'break-word',
           }}
         >
           <span style={{ color: 'var(--terminal-mute)' }}>{prompt} </span>

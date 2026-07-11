@@ -1,10 +1,16 @@
-import { useTheme } from '../../context/ThemeContext';
 import { useSearch } from '../../context/SearchContext';
+import { useTheme } from '../../context/ThemeContext';
 import { Link, useLocation } from 'react-router-dom';
 
+const navItems = [
+  { label: 'How this works', href: '#how-it-works', id: 'how' },
+  { label: 'Curriculum', href: '#curriculum', id: 'curriculum' },
+  { label: 'Playground', href: '#playground', id: 'playground' },
+];
+
 export default function Header() {
-  const { theme, toggleTheme } = useTheme();
   const { openPalette } = useSearch();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const isHome = location.pathname === '/';
 
@@ -17,10 +23,10 @@ export default function Header() {
         right: 0,
         zIndex: 100,
         height: 64,
-        background: 'var(--header-bg)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderBottom: '1px solid var(--rule-soft)',
+        background: 'var(--bg-header)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid var(--rule)',
       }}
     >
       <div
@@ -34,7 +40,6 @@ export default function Header() {
           justifyContent: 'space-between',
         }}
       >
-        {/* Logo */}
         <Link
           to="/"
           style={{
@@ -42,74 +47,67 @@ export default function Header() {
             alignItems: 'center',
             gap: 10,
             fontFamily: "'VT323', monospace",
-            fontSize: 'clamp(1rem, 3vw, 1.6rem)',
+            fontSize: 'clamp(1rem, 3vw, 1.4rem)',
             color: 'var(--ink)',
             textDecoration: 'none',
-            transition: 'color 0.15s',
+            letterSpacing: '0.02em',
           }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'var(--blueprint)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink)')}
         >
           <span
+            className="logo-icon"
             style={{
               width: 12,
               height: 12,
               background: 'var(--blueprint)',
               flexShrink: 0,
+              transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
             }}
           />
-          <span style={{ display: 'inline' }}>K8 Wizard</span>
+          <span className="logo-text">K8 Wizard</span>
         </Link>
 
-        {/* Navigation */}
         <nav
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: 24,
             fontFamily: "'JetBrains Mono', monospace",
-            fontSize: '0.8rem',
+            fontSize: '0.78rem',
             textTransform: 'uppercase',
-            letterSpacing: '0.08em',
+            letterSpacing: '0.1em',
           }}
           className="header-nav"
         >
-          <a
-            href={isHome ? '#how-it-works' : '/'}
-            style={{ color: 'var(--ink-soft)', transition: 'color 0.15s', textDecoration: 'none' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--blueprint)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink-soft)')}
-          >
-            How this works
-          </a>
-          <a
-            href={isHome ? '#curriculum' : '/'}
-            style={{ color: 'var(--ink-soft)', transition: 'color 0.15s', textDecoration: 'none' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--blueprint)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink-soft)')}
-          >
-            Curriculum
-          </a>
-          <a
-            href={isHome ? '#playground' : '/'}
-            style={{ color: 'var(--ink-soft)', transition: 'color 0.15s', textDecoration: 'none' }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--blueprint)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--ink-soft)')}
-          >
-            Playground
-          </a>
+          {navItems.map(item => (
+            <a
+              key={item.id}
+              href={isHome ? item.href : '/'}
+              className="nav-link"
+              style={{
+                color: 'var(--ink-soft)',
+                textDecoration: 'none',
+                transition: 'color 0.15s',
+                position: 'relative',
+                paddingBottom: 2,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
+            >
+              {item.label}
+            </a>
+          ))}
 
-          {/* Search */}
           <button
             onClick={openPalette}
             aria-label="Search (Cmd+K)"
+            className="btn"
             style={{
               width: 36,
               height: 36,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid var(--rule-soft)',
+              border: '1px solid var(--rule)',
               background: 'transparent',
               color: 'var(--ink-soft)',
               cursor: 'pointer',
@@ -122,23 +120,23 @@ export default function Header() {
             }}
             onMouseLeave={e => {
               e.currentTarget.style.color = 'var(--ink-soft)';
-              e.currentTarget.style.borderColor = 'var(--rule-soft)';
+              e.currentTarget.style.borderColor = 'var(--rule)';
             }}
           >
             ⌘K
           </button>
 
-          {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            className="btn"
             style={{
               width: 36,
               height: 36,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid var(--rule-soft)',
+              border: '1px solid var(--rule)',
               background: 'transparent',
               color: 'var(--ink-soft)',
               cursor: 'pointer',
@@ -151,7 +149,7 @@ export default function Header() {
             }}
             onMouseLeave={e => {
               e.currentTarget.style.color = 'var(--ink-soft)';
-              e.currentTarget.style.borderColor = 'var(--rule-soft)';
+              e.currentTarget.style.borderColor = 'var(--rule)';
             }}
           >
             {theme === 'light' ? '☾' : '☀'}

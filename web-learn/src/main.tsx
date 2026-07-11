@@ -9,7 +9,7 @@ import './styles/tokens.css'
 import './styles/global.css'
 import './styles/animations.css'
 
-const TOTAL_LESSONS = 58;
+const TOTAL_LESSONS = 70;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -7,13 +7,15 @@ interface YamlBlockProps {
 
 export default function YamlBlock({ filename, code }: YamlBlockProps) {
   return (
-    <figure style={{ margin: '16px 0' }}>
+    <figure style={{ margin: '24px 0', width: '100%', maxWidth: '100%' }}>
       {/* Terminal Window */}
       <div
         style={{
           border: '1px solid var(--terminal-border)',
           background: 'var(--terminal-bg)',
           overflow: 'hidden',
+          width: '100%',
+          maxWidth: '100%',
         }}
       >
         {/* Chrome */}
@@ -45,7 +47,7 @@ export default function YamlBlock({ filename, code }: YamlBlockProps) {
         </div>
 
         {/* Code */}
-        <div style={{ padding: '0 16px', position: 'relative' }}>
+        <div style={{ padding: '0 16px', position: 'relative', width: '100%', maxWidth: '100%' }}>
           <div style={{ position: 'absolute', top: 8, right: 8 }}>
             <CopyButton text={code} />
           </div>
@@ -58,9 +60,11 @@ export default function YamlBlock({ filename, code }: YamlBlockProps) {
               overflowX: 'auto',
               padding: '12px 0',
               margin: 0,
+              width: '100%',
+              maxWidth: '100%',
             }}
           >
-            <code>{code}</code>
+            <code style={{ width: '100%', maxWidth: '100%' }}>{code}</code>
           </pre>
         </div>
       </div>
