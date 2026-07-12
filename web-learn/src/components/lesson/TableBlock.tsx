@@ -14,6 +14,7 @@ export default function TableBlock({ headers, rows }: TableBlockProps) {
       }}
     >
       <table
+        className="lesson-table"
         style={{
           width: '100%',
           borderCollapse: 'collapse',

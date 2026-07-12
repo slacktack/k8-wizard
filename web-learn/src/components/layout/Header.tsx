@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSearch } from '../../context/SearchContext';
 import { useTheme } from '../../context/ThemeContext';
 import { Link, useLocation } from 'react-router-dom';
@@ -8,11 +9,27 @@ const navItems = [
   { label: 'Playground', href: '#playground', id: 'playground' },
 ];
 
+function mobileLink(color: string, weight = 400): React.CSSProperties {
+  return {
+    display: 'block',
+    padding: '12px 24px',
+    color,
+    fontWeight: weight,
+    textDecoration: 'none',
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.82rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    borderBottom: '1px solid var(--rule-soft)',
+  };
+}
+
 export default function Header() {
   const { openPalette } = useSearch();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const isHome = location.pathname === '/';
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header
@@ -171,8 +188,61 @@ export default function Header() {
           >
             {theme === 'light' ? '☾' : '☀'}
           </button>
+
+          <button
+            onClick={() => setMobileOpen(o => !o)}
+            aria-label="Menu"
+            aria-expanded={mobileOpen}
+            className="mobile-menu-btn"
+            style={{
+              width: 36,
+              height: 36,
+              display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid var(--rule)',
+              background: 'transparent',
+              color: 'var(--ink-soft)',
+              cursor: 'pointer',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.6">
+              {mobileOpen
+                ? <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
+                : <path d="M3 6h14M3 10h14M3 14h14" strokeLinecap="round" />}
+            </svg>
+          </button>
         </nav>
       </div>
+
+      {mobileOpen && (
+        <div
+          className="mobile-menu"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            background: 'var(--bg-header)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            borderBottom: '1px solid var(--rule)',
+            padding: '8px 0',
+          }}
+        >
+          {navItems.map(item => (
+            <a
+              key={item.id}
+              href={isHome ? item.href : '/'}
+              onClick={() => setMobileOpen(false)}
+              style={mobileLink('var(--ink-soft)')}
+            >
+              {item.label}
+            </a>
+          ))}
+          <Link to="/whiteboard" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
+            System Design Draw
+          </Link>
+        </div>
+      )}
     </header>
   );
 }

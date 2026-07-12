@@ -33,7 +33,7 @@ function RevealSection({ children, delay = 0 }: { children: React.ReactNode; del
 
 export default function LessonView({ lesson }: LessonViewProps) {
   return (
-    <article style={{ paddingTop: 28, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+    <article className="lesson-article" style={{ paddingTop: 28, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
       {/* Sections */}
       {lesson.sections.map((section, i) => {
         const delay = Math.min(i * 0.04, 0.4);

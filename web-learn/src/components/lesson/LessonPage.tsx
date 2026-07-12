@@ -87,7 +87,7 @@ export default function LessonPage() {
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontVariantNumeric: 'tabular-nums' }} className="progress-text">
-              <span style={{ color: 'var(--ink-soft)' }}>
+              <span className="progress-count" style={{ color: 'var(--ink-soft)' }}>
                 {lessonIndex + 1} of {totalInPhase}
               </span>
               <div style={{ width: 80, height: 4, background: 'var(--rule-soft)' }}>
@@ -98,7 +98,7 @@ export default function LessonPage() {
           </div>
         </div>
 
-        <div className="container" style={{ paddingTop: 40 }}>
+        <div className="container lesson-body" style={{ paddingTop: 40 }}>
           {/* Two-column grid */}
           <div
             style={{
@@ -118,9 +118,11 @@ export default function LessonPage() {
 
           {/* Prev/Next Navigation */}
           <div
+            className="lesson-nav"
             style={{
               display: 'flex',
               justifyContent: 'space-between',
+              gap: 12,
               padding: '32px 0 64px',
               borderTop: '1px solid var(--rule)',
               marginTop: 48,

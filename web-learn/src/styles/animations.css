@@ -385,9 +385,9 @@
 }
 
 @media (max-width: 768px) {
-  .header-nav a:not(:last-child) {
-    display: none;
-  }
+  /* Header: swap text links for a hamburger menu */
+  .header-nav .nav-link { display: none !important; }
+  .mobile-menu-btn { display: flex !important; }
 
   .preface-grid {
     grid-template-columns: 1fr !important;
@@ -436,19 +436,35 @@
   .lesson-sidebar {
     position: static !important;
     max-height: none !important;
+    padding-top: 0 !important;
   }
+
+  .lesson-grid { gap: 24px !important; }
+  .lesson-article { padding-top: 8px !important; }
+  .lesson-body { padding-top: 20px !important; }
+
+  /* Stack prev/next so long lesson titles don't overflow */
+  .lesson-nav { flex-direction: column !important; }
+  .lesson-nav > div { width: 100%; }
+  .lesson-nav a, .lesson-nav button { width: 100%; }
 
   .mini-progress-bar {
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-wrap: nowrap;
+    gap: 8px;
   }
+
+  /* Drop the phase crumb on mobile — back arrow + lesson title is enough */
+  .progress-crumb { display: none !important; }
 
   .mini-progress-bar .progress-text {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
+    gap: 8px !important;
   }
+  /* Numeric "x of y" is redundant with the bar on small screens */
+  .mini-progress-bar .progress-count { display: none !important; }
 
   .mini-progress-bar .progress-title {
-    max-width: 160px;
+    max-width: 62vw;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -475,6 +491,16 @@
   .playground-grid {
     min-height: 300px;
   }
+
+  /* Tighter gutters + spacing on phones */
+  .container { padding: 0 16px !important; }
+  .lesson-body { padding-top: 16px !important; }
+  .section-padding { padding: 40px 0 !important; }
+  .code-block-hover pre { font-size: 0.76rem !important; }
+  .mini-progress-bar .progress-title { max-width: 50vw; }
+
+  /* Keep wide tables readable by letting them scroll instead of crushing */
+  .lesson-table { min-width: 460px; }
 }
 
 /* ==============================
