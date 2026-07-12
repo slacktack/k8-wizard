@@ -4,7 +4,7 @@ export default function Masthead() {
   return (
     <section
       className="section-padding"
-      style={{ paddingTop: 'calc(64px + 80px)', textAlign: 'center', minHeight: 'calc(100vh - 64px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      style={{ textAlign: 'center', minHeight: 'calc(100vh - 64px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
       <div className="container">
         <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--blueprint)', marginBottom: 20 }}>

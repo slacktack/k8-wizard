@@ -1,23 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PHASES } from '../../data/phases';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import StatusDot from '../ui/StatusDot';
 import { useProgress } from '../../context/ProgressContext';
 import AsciiRule from '../ui/AsciiRule';
-import PhaseModal from '../modal/PhaseModal';
 
 export default function TOC() {
   const { ref, isVisible } = useScrollReveal(0.05);
   const { isCompleted } = useProgress();
-  const [activePhase, setActivePhase] = useState<string | null>(null);
-
-  useEffect(() => {
-    function handleEsc(e: KeyboardEvent) {
-      if (e.key === 'Escape') setActivePhase(null);
-    }
-    document.addEventListener('keydown', handleEsc);
-    return () => document.removeEventListener('keydown', handleEsc);
-  }, []);
+  const navigate = useNavigate();
 
   function getPhaseStatus(phaseId: string) {
     const phase = PHASES.find(p => p.id === phaseId);
@@ -58,11 +49,11 @@ export default function TOC() {
           return (
             <div
               key={phase.id}
-              onClick={() => setActivePhase(phase.id)}
+              onClick={() => navigate(`/phase/${phase.id}`)}
               role="button"
               tabIndex={0}
               aria-label={`Open ${phase.title} phase`}
-              onKeyDown={e => { if (e.key === 'Enter') setActivePhase(phase.id); }}
+              onKeyDown={e => { if (e.key === 'Enter') navigate(`/phase/${phase.id}`); }}
               className="phase-row"
               style={{
                 display: 'grid',
@@ -103,10 +94,6 @@ export default function TOC() {
         })}
 
         <AsciiRule />
-
-        {activePhase && (
-          <PhaseModal phaseId={activePhase} onClose={() => setActivePhase(null)} />
-        )}
       </div>
     </section>
   );

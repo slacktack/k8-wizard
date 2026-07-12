@@ -627,6 +627,7 @@ spec:
     duration: '25 min',
     sections: [
       { type: 'text', body: 'Create a Kind cluster, deploy an app, watch it self-heal, port-forward, and clean up.' },
+      { type: 'uml', preset: 'web-app', title: 'What you\'re building — a 3-tier web app' },
       { type: 'command', prompt: '$', cmd: 'kind create cluster --name learn', output: 'Creating cluster "learn" ...' },
       { type: 'text', body: 'Save this YAML and apply it:' },
       { type: 'yaml', filename: 'first-app.yaml', code: `apiVersion: apps/v1
@@ -1012,6 +1013,7 @@ replicas:
     duration: '20 min',
     sections: [
       { type: 'text', body: 'A production-ready backend deployment with health probes, env injection, resource limits, and a service.' },
+      { type: 'uml', preset: 'microservices', title: 'Scaling out — one Deployment + Service per concern' },
       { type: 'yaml', filename: 'backend.yaml', code: `apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1606,6 +1608,7 @@ spec:
     duration: '20 min',
     sections: [
       { type: 'text', body: 'Test your cluster\'s scaling behavior with real load.' },
+      { type: 'uml', preset: 'autoscale', title: 'How autoscaling reacts to load' },
       { type: 'heading', level: 3, text: 'k6 (Modern, Scriptable)' },
       { type: 'code', language: 'javascript', code: `kubectl run k6 --rm -it --image=grafana/k6 -- run - <<EOF
 import http from 'k6/http';
@@ -2111,6 +2114,7 @@ spec:
     difficulty: 'advanced',
     duration: '10 min',
     sections: [
+      { type: 'uml', preset: 'observability', title: 'The three pillars, all in-cluster' },
       { type: 'heading', level: 2, text: 'RED Method (For Services)' },
       { type: 'table', headers: ['Metric', 'What', 'Example'], rows: [
         ['Rate', 'Requests per second', '1500 req/s'],
@@ -2329,6 +2333,7 @@ spec:
     duration: '25 min',
     sections: [
       { type: 'text', body: 'GitOps with ArgoCD is the modern standard: Git is the single source of truth, and ArgoCD syncs cluster state to match Git.' },
+      { type: 'uml', preset: 'gitops', title: 'Push to Git — the cluster reconciles itself' },
       { type: 'heading', level: 2, text: 'GitHub Actions CI/CD' },
       { type: 'yaml', filename: '.github/workflows/deploy.yaml', code: `name: Deploy to K8s
 on:

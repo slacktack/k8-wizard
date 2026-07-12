@@ -6,6 +6,8 @@ import CodeBlock from './CodeBlock';
 import TableBlock from './TableBlock';
 import DiagramBlock from './DiagramBlock';
 import UMLDiagram, { DOCKER_BUILD_UML, K8_ARCHITECTURE_UML } from '../tui/UMLDiagram';
+import ArchitectureDiagram from '../diagram/ArchitectureDiagram';
+import { ARCHITECTURES } from '../../data/architectures';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 interface LessonViewProps {
@@ -50,7 +52,7 @@ export default function LessonView({ lesson }: LessonViewProps) {
                     fontFamily: "'VT323', monospace",
                     fontSize: section.level === 2 ? 'clamp(1.5rem, 3.5vw, 2rem)' : '1.25rem',
                     color: 'var(--ink)',
-                    marginTop: section.level === 2 ? 48 : 32,
+                    marginTop: i === 0 ? 0 : section.level === 2 ? 48 : 32,
                     marginBottom: 16,
                     scrollMarginTop: 120,
                     lineHeight: 1.2,
@@ -90,12 +92,25 @@ export default function LessonView({ lesson }: LessonViewProps) {
                 <DiagramBlock lines={section.lines} />
               </RevealSection>
             );
-          case 'uml':
+          case 'uml': {
+            const arch = ARCHITECTURES.find(a => a.id === section.preset);
             return (
               <RevealSection key={i} delay={delay}>
-                <UMLDiagram title={section.title} nodes={section.preset === 'docker-build' ? DOCKER_BUILD_UML : K8_ARCHITECTURE_UML} />
+                {arch ? (
+                  <figure style={{ margin: '24px 0' }}>
+                    <ArchitectureDiagram architecture={arch} />
+                    {section.title && (
+                      <figcaption style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', color: 'var(--ink-mute)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 10, textAlign: 'center' }}>
+                        {section.title}
+                      </figcaption>
+                    )}
+                  </figure>
+                ) : (
+                  <UMLDiagram title={section.title} nodes={section.preset === 'docker-build' ? DOCKER_BUILD_UML : K8_ARCHITECTURE_UML} />
+                )}
               </RevealSection>
             );
+          }
           case 'note':
             return (
               <RevealSection key={i} delay={delay}>

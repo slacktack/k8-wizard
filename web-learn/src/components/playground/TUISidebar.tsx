@@ -34,13 +34,13 @@ export default function TUISidebar({ steps, onRun, onReset, canRun }: TUISidebar
               letterSpacing: '0.08em',
               padding: '10px 16px',
               border: '1px solid var(--tui-border)',
-              background: canRun ? 'var(--blueprint)' : 'transparent',
-              color: canRun ? 'var(--bg)' : 'var(--ink-mute)',
+              background: canRun ? 'var(--tui-blue)' : 'transparent',
+              color: canRun ? '#0f1424' : 'var(--ink-mute)',
               cursor: canRun ? 'pointer' : 'not-allowed',
-              transition: 'background 0.1s',
+              transition: 'background 0.1s, filter 0.1s',
             }}
-            onMouseEnter={e => { if (canRun) e.currentTarget.style.background = 'var(--blueprint-bright)'; }}
-            onMouseLeave={e => { if (canRun) e.currentTarget.style.background = 'var(--blueprint)'; }}
+            onMouseEnter={e => { if (canRun) e.currentTarget.style.filter = 'brightness(1.12)'; }}
+            onMouseLeave={e => { if (canRun) e.currentTarget.style.filter = 'none'; }}
           >
             {canRun ? `▶ Run: ${steps.find(s => s.current)?.title || 'Complete'}` : '✓ All Steps Complete'}
           </button>
@@ -94,7 +94,7 @@ export default function TUISidebar({ steps, onRun, onReset, canRun }: TUISidebar
                 alignItems: 'center',
                 gap: 8,
                 padding: '3px 0',
-                color: step.done ? 'var(--tui-green)' : step.current ? 'var(--blueprint)' : 'var(--ink-mute)',
+                color: step.done ? 'var(--tui-green)' : step.current ? 'var(--tui-blue)' : 'var(--ink-mute)',
               }}
             >
               <span style={{ flexShrink: 0, width: 14 }}>{step.done ? '✓' : step.current ? '▸' : '○'}</span>

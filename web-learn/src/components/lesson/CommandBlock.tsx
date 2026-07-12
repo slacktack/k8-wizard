@@ -1,4 +1,5 @@
 import CopyButton from '../ui/CopyButton';
+import { highlight } from '../../utils/highlight';
 
 interface CommandBlockProps {
   prompt: string;
@@ -17,6 +18,7 @@ export default function CommandBlock({ prompt, cmd, output }: CommandBlockProps)
         width: '100%',
         maxWidth: '100%',
       }}
+      className="code-block-hover"
     >
       {/* Terminal Chrome */}
       <div
@@ -44,16 +46,16 @@ export default function CommandBlock({ prompt, cmd, output }: CommandBlockProps)
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '0.85rem',
             lineHeight: 1.5,
-            color: 'var(--terminal-text)',
             display: 'block',
-            marginBottom: output ? 8 : 0,
+            marginBottom: output ? 10 : 0,
             width: '100%',
             maxWidth: '100%',
             overflowWrap: 'break-word',
           }}
         >
-          <span style={{ color: 'var(--terminal-mute)' }}>{prompt} </span>
-          <span>{cmd}</span>
+          {/* Input: bright green prompt + highlighted command */}
+          <span style={{ color: 'var(--terminal-green)', fontWeight: 600, userSelect: 'none' }}>{prompt} </span>
+          <span style={{ color: 'var(--terminal-text)', fontWeight: 500 }}>{highlight(cmd, 'bash')}</span>
         </code>
         {output && (
           <pre
@@ -61,8 +63,11 @@ export default function CommandBlock({ prompt, cmd, output }: CommandBlockProps)
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '0.85rem',
               lineHeight: 1.5,
-              color: 'var(--terminal-green)',
+              color: 'var(--terminal-output)',
               margin: 0,
+              marginLeft: 4,
+              paddingLeft: 12,
+              borderLeft: '2px solid var(--terminal-chrome-border)',
               whiteSpace: 'pre-wrap',
             }}
           >

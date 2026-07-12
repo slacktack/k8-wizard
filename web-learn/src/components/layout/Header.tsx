@@ -97,6 +97,23 @@ export default function Header() {
             </a>
           ))}
 
+          <Link
+            to="/whiteboard"
+            className="nav-link"
+            style={{
+              color: 'var(--blueprint)',
+              fontWeight: 800,
+              textDecoration: 'none',
+              transition: 'color 0.15s, text-shadow 0.15s',
+              position: 'relative',
+              paddingBottom: 2,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint-bright)'; e.currentTarget.style.textShadow = '0 0 12px var(--blueprint-tint-strong)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--blueprint)'; e.currentTarget.style.textShadow = 'none'; }}
+          >
+            System Design Draw
+          </Link>
+
           <button
             onClick={openPalette}
             aria-label="Search (Cmd+K)"

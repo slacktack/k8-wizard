@@ -1,11 +1,96 @@
 /* ==============================
-   K8 Wizard — Animations v2.1
+   K8 Wizard — Animations v3.0 (Premium)
    ============================== */
 
 /* --- Easing Classes --- */
 .ease-smooth { transition-timing-function: var(--ease-smooth); }
 .ease-snappy { transition-timing-function: var(--ease-snappy); }
 .ease-bounce { transition-timing-function: var(--ease-bounce); }
+
+/* ==============================
+   Page Transition
+   ============================== */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  /* NOTE: intentionally no `forwards` fill-mode. A persisted transform
+     (even translateY(0)) creates a containing block that breaks
+     position:fixed for descendant modals/overlays, pinning them to the
+     document top instead of the viewport. The animation's end state
+     equals the element's base state, so no fill-mode is needed. */
+  animation: pageEnter 0.25s var(--ease-snappy);
+}
+
+.page-enter-content {
+  animation: pageEnter 0.35s var(--ease-smooth) 0.05s both;
+}
+
+/* ==============================
+   Copy Button Success
+   ============================== */
+@keyframes copySuccess {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.copy-success {
+  animation: copySuccess 0.35s var(--ease-bounce);
+}
+
+/* ==============================
+   Sidebar Accordion
+   ============================== */
+.sidebar-card-body {
+  overflow: hidden;
+  transition: max-height 0.25s var(--ease-snappy),
+              opacity 0.2s var(--ease-snappy),
+              padding 0.25s var(--ease-snappy);
+}
+
+.sidebar-card-body.open {
+  max-height: 600px;
+  opacity: 1;
+  padding: 14px 16px;
+}
+
+.sidebar-card-body.closed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 16px;
+}
+
+/* ==============================
+   Code Block Hover Lift
+   ============================== */
+.code-block-hover {
+  transition: transform 0.2s var(--ease-snappy),
+              box-shadow 0.2s var(--ease-snappy),
+              border-color 0.2s var(--ease-snappy);
+}
+
+.code-block-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+  border-color: var(--blueprint);
+}
+
+/* ==============================
+   Copy Button Fade
+   ============================== */
+.copy-btn-fade {
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-snappy),
+              transform 0.2s var(--ease-snappy);
+}
+
+.copy-btn-fade:hover,
+.code-block-hover:hover .copy-btn-fade {
+  opacity: 1;
+}
 
 /* ==============================
    Scroll Reveals
@@ -324,6 +409,29 @@
   .lesson-grid {
     grid-template-columns: 1fr !important;
   }
+
+  .build-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .arch-tier-label {
+    display: none !important;
+  }
+
+  /* Whiteboard: reclaim space on small screens */
+  .wb-hint { display: none !important; }
+  .wb-palette { width: 128px !important; padding: 8px !important; }
+
+  /* Shrink the floating "Launch K8 Wizard" tab on mobile */
+  .floating-wizard {
+    padding: 8px 8px !important;
+    font-size: 0.58rem !important;
+    gap: 6px !important;
+    right: 8px !important;
+    letter-spacing: 0.04em !important;
+  }
+  .floating-wizard svg { width: 12px !important; height: 12px !important; }
 
   .lesson-sidebar {
     position: static !important;

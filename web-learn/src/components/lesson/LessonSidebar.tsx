@@ -199,7 +199,10 @@ export default function LessonSidebar({ lesson, phase, lessonIndex }: LessonSide
 function SidebarCard({ title, children }: { title: string; children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   return (
-    <div style={{ border: '1px solid var(--rule)', background: 'var(--bg-elevated)' }}>
+    <div style={{ border: '1px solid var(--rule)', background: 'var(--bg-elevated)', transition: 'border-color 0.2s' }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--blueprint)'; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--rule)'; }}
+    >
       <div
         onClick={() => setCollapsed(!collapsed)}
         style={{
@@ -220,9 +223,11 @@ function SidebarCard({ title, children }: { title: string; children: React.React
         onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
       >
         <span>{title}</span>
-        <span style={{ fontSize: '0.65rem', color: 'var(--ink-mute)', transition: 'transform 0.2s', transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>▼</span>
+        <span style={{ fontSize: '0.65rem', color: 'var(--ink-mute)', transition: 'transform 0.2s var(--ease-snappy)', transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>▼</span>
       </div>
-      {!collapsed && <div style={{ padding: '14px 16px', width: '100%', maxWidth: '100%', overflowX: 'hidden' }}>{children}</div>}
+      <div className={`sidebar-card-body ${collapsed ? 'closed' : 'open'}`}>
+        {children}
+      </div>
     </div>
   );
 }

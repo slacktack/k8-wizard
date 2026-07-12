@@ -2,7 +2,13 @@ import { Routes, Route } from 'react-router-dom';
 import { useKeyboard } from './hooks/useKeyboard';
 import LandingPage from './components/landing/LandingPage';
 import LessonPage from './components/lesson/LessonPage';
+import PhaseLessonsPage from './components/lesson/PhaseLessonsPage';
+import WhiteboardPage from './whiteboard/WhiteboardPage';
 import CommandPalette from './components/command-palette/CommandPalette';
+
+function PageWrapper({ children }: { children: React.ReactNode }) {
+  return <div className="page-enter">{children}</div>;
+}
 
 export default function App() {
   useKeyboard();
@@ -10,8 +16,10 @@ export default function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/lesson/:phaseId/:lessonId" element={<LessonPage />} />
+        <Route path="/" element={<PageWrapper><LandingPage /></PageWrapper>} />
+        <Route path="/phase/:phaseId" element={<PageWrapper><PhaseLessonsPage /></PageWrapper>} />
+        <Route path="/lesson/:phaseId/:lessonId" element={<PageWrapper><LessonPage /></PageWrapper>} />
+        <Route path="/whiteboard" element={<WhiteboardPage />} />
       </Routes>
       <CommandPalette />
     </>

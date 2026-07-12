@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { LESSONS } from '../../data/lessons';
 import { PHASES } from '../../data/phases';
@@ -11,6 +12,11 @@ export default function LessonPage() {
   const { lessonId, phaseId } = useParams<{ lessonId: string; phaseId: string }>();
   const lesson = lessonId ? LESSONS[lessonId] : undefined;
   const phase = phaseId ? PHASES.find(p => p.id === phaseId) : undefined;
+
+  // Start each lesson at the top rather than inheriting the previous scroll position
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [lessonId]);
 
   if (!lesson || !phase) {
     return (
@@ -62,10 +68,18 @@ export default function LessonPage() {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <Link
-                to="/"
+                to={`/phase/${phase.id}`}
+                aria-label={`Back to ${phase.title}`}
                 style={{ color: 'var(--blueprint)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.08em' }}
               >
                 ←
+              </Link>
+              <Link
+                to={`/phase/${phase.id}`}
+                className="progress-crumb"
+                style={{ color: 'var(--ink-mute)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.06em' }}
+              >
+                {phase.title}
               </Link>
               <span style={{ color: 'var(--ink-mute)' }}>/</span>
               <span style={{ color: 'var(--ink)' }} className="progress-title">

@@ -14,6 +14,7 @@ export default function FloatingWizardButton() {
   return (
     <a
       href="#curriculum"
+      className="floating-wizard"
       style={{
         position: 'fixed',
         right: 24,
