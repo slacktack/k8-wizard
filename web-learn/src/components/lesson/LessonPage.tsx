@@ -66,7 +66,7 @@ export default function LessonPage() {
               fontSize: '0.72rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
               <Link
                 to={`/phase/${phase.id}`}
                 aria-label={`Back to ${phase.title}`}
