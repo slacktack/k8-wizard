@@ -8,6 +8,7 @@ const navItems = [
   { label: 'How this works', href: '#how-it-works', id: 'how' },
   { label: 'Curriculum', href: '#curriculum', id: 'curriculum' },
   { label: 'Playground', href: '#playground', id: 'playground' },
+  { label: 'Case Studies', href: '/case-studies', id: 'case-studies', external: true },
 ];
 
 const profColors: Record<string, string> = {
@@ -112,31 +113,53 @@ export default function Header() {
           }}
           className="header-nav"
         >
-          {navItems.map(item => (
-            <a
-              key={item.id}
-              href={isHome ? item.href : '/'}
-              className="nav-link"
-              style={{
-                color: 'var(--ink-soft)',
-                textDecoration: 'none',
-                transition: 'color 0.15s',
-                position: 'relative',
-                paddingBottom: 2,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map(item => {
+            if (item.external) {
+              return (
+                <Link
+                  key={item.id}
+                  to={item.href}
+                  className="nav-link"
+                  style={{
+                    color: location.pathname.startsWith('/case-studies') ? 'var(--blueprint)' : 'var(--ink-soft)',
+                    textDecoration: 'none',
+                    transition: 'color 0.15s',
+                    position: 'relative',
+                    paddingBottom: 2,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+                  onMouseLeave={e => { if (!location.pathname.startsWith('/case-studies')) e.currentTarget.style.color = 'var(--ink-soft)'; }}
+                >
+                  {item.label}
+                </Link>
+              );
+            }
+            return (
+              <a
+                key={item.id}
+                href={isHome ? item.href : '/'}
+                className="nav-link"
+                style={{
+                  color: 'var(--ink-soft)',
+                  textDecoration: 'none',
+                  transition: 'color 0.15s',
+                  position: 'relative',
+                  paddingBottom: 2,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
+              >
+                {item.label}
+              </a>
+            );
+          })}
 
           {/* Quiz nav link with proficiency badge */}
           <Link
             to="/quiz"
             className="nav-link"
             style={{
-              color: isQuiz ? 'var(--blueprint)' : 'var(--ink-soft)',
+              color: isQuiz || location.pathname.startsWith('/quiz/') ? 'var(--blueprint)' : 'var(--ink-soft)',
               textDecoration: 'none',
               transition: 'color 0.15s',
               position: 'relative',
@@ -146,7 +169,7 @@ export default function Header() {
               gap: 6,
             }}
             onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
-            onMouseLeave={e => { if (!isQuiz) e.currentTarget.style.color = 'var(--ink-soft)'; }}
+            onMouseLeave={e => { if (!isQuiz && !location.pathname.startsWith('/quiz/')) e.currentTarget.style.color = 'var(--ink-soft)'; }}
           >
             Quiz
             {overallStats.total > 0 && (
@@ -288,7 +311,16 @@ export default function Header() {
             </a>
           ))}
           <Link to="/quiz" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
-            Quiz{overallStats.total > 0 ? ` · ${profLabels[proficiency]}` : ''}
+            Quiz Hub{overallStats.total > 0 ? ` · ${profLabels[proficiency]}` : ''}
+          </Link>
+          <Link to="/quiz/docker" onClick={() => setMobileOpen(false)} style={mobileLink('var(--ink-soft)')}>
+            Docker Quiz
+          </Link>
+          <Link to="/quiz/kubernetes" onClick={() => setMobileOpen(false)} style={mobileLink('var(--ink-soft)')}>
+            K8s Quiz
+          </Link>
+          <Link to="/case-studies" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
+            Case Studies
           </Link>
           <Link to="/whiteboard" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
             System Design Draw
