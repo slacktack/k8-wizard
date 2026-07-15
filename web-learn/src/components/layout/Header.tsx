@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearch } from '../../context/SearchContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useQuiz } from '../../context/QuizContext';
 import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
@@ -8,6 +9,20 @@ const navItems = [
   { label: 'Curriculum', href: '#curriculum', id: 'curriculum' },
   { label: 'Playground', href: '#playground', id: 'playground' },
 ];
+
+const profColors: Record<string, string> = {
+  start: 'var(--terminal-green)',
+  intermediate: 'var(--blueprint)',
+  advanced: 'var(--terminal-yellow)',
+  expert: 'var(--terminal-red)',
+};
+
+const profLabels: Record<string, string> = {
+  start: 'Start',
+  intermediate: 'Int.',
+  advanced: 'Adv.',
+  expert: 'Expert',
+};
 
 function mobileLink(color: string, weight = 400): React.CSSProperties {
   return {
@@ -27,8 +42,10 @@ function mobileLink(color: string, weight = 400): React.CSSProperties {
 export default function Header() {
   const { openPalette } = useSearch();
   const { theme, toggleTheme } = useTheme();
+  const { proficiency, overallStats } = useQuiz();
   const location = useLocation();
   const isHome = location.pathname === '/';
+  const isQuiz = location.pathname === '/quiz';
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -113,6 +130,38 @@ export default function Header() {
               {item.label}
             </a>
           ))}
+
+          {/* Quiz nav link with proficiency badge */}
+          <Link
+            to="/quiz"
+            className="nav-link"
+            style={{
+              color: isQuiz ? 'var(--blueprint)' : 'var(--ink-soft)',
+              textDecoration: 'none',
+              transition: 'color 0.15s',
+              position: 'relative',
+              paddingBottom: 2,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+            onMouseLeave={e => { if (!isQuiz) e.currentTarget.style.color = 'var(--ink-soft)'; }}
+          >
+            Quiz
+            {overallStats.total > 0 && (
+              <span style={{
+                fontSize: '0.58rem',
+                padding: '1px 5px',
+                border: `1px solid ${profColors[proficiency]}`,
+                color: profColors[proficiency],
+                fontWeight: 600,
+                lineHeight: 1.3,
+              }}>
+                {profLabels[proficiency]}
+              </span>
+            )}
+          </Link>
 
           <Link
             to="/whiteboard"
@@ -238,6 +287,9 @@ export default function Header() {
               {item.label}
             </a>
           ))}
+          <Link to="/quiz" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
+            Quiz{overallStats.total > 0 ? ` · ${profLabels[proficiency]}` : ''}
+          </Link>
           <Link to="/whiteboard" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
             System Design Draw
           </Link>

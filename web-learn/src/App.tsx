@@ -5,6 +5,7 @@ import LandingPage from './components/landing/LandingPage';
 import LessonPage from './components/lesson/LessonPage';
 import PhaseLessonsPage from './components/lesson/PhaseLessonsPage';
 import WhiteboardPage from './whiteboard/WhiteboardPage';
+import QuizHubPage from './components/quiz/QuizHubPage';
 import NotFoundPage from './components/NotFoundPage';
 import ProgressToast from './components/ui/ProgressToast';
 import CommandPalette from './components/command-palette/CommandPalette';
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/" element={<PageWrapper><LandingPage /></PageWrapper>} />
         <Route path="/phase/:phaseId" element={<PageWrapper><PhaseLessonsPage /></PageWrapper>} />
         <Route path="/lesson/:phaseId/:lessonId" element={<PageWrapper><LessonPage /></PageWrapper>} />
+        <Route path="/quiz" element={<PageWrapper><QuizHubPage /></PageWrapper>} />
         <Route path="/whiteboard" element={<WhiteboardPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
