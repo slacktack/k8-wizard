@@ -8,7 +8,6 @@ const navItems = [
   { label: 'How this works', href: '#how-it-works', id: 'how' },
   { label: 'Curriculum', href: '#curriculum', id: 'curriculum' },
   { label: 'Playground', href: '#playground', id: 'playground' },
-  { label: 'Case Studies', href: '/case-studies', id: 'case-studies', external: true },
 ];
 
 const profColors: Record<string, string> = {
@@ -113,46 +112,24 @@ export default function Header() {
           }}
           className="header-nav"
         >
-          {navItems.map(item => {
-            if (item.external) {
-              return (
-                <Link
-                  key={item.id}
-                  to={item.href}
-                  className="nav-link"
-                  style={{
-                    color: location.pathname.startsWith('/case-studies') ? 'var(--blueprint)' : 'var(--ink-soft)',
-                    textDecoration: 'none',
-                    transition: 'color 0.15s',
-                    position: 'relative',
-                    paddingBottom: 2,
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
-                  onMouseLeave={e => { if (!location.pathname.startsWith('/case-studies')) e.currentTarget.style.color = 'var(--ink-soft)'; }}
-                >
-                  {item.label}
-                </Link>
-              );
-            }
-            return (
-              <a
-                key={item.id}
-                href={isHome ? item.href : '/'}
-                className="nav-link"
-                style={{
-                  color: 'var(--ink-soft)',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s',
-                  position: 'relative',
-                  paddingBottom: 2,
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
-              >
-                {item.label}
-              </a>
-            );
-          })}
+          {navItems.map(item => (
+            <a
+              key={item.id}
+              href={isHome ? item.href : '/'}
+              className="nav-link"
+              style={{
+                color: 'var(--ink-soft)',
+                textDecoration: 'none',
+                transition: 'color 0.15s',
+                position: 'relative',
+                paddingBottom: 2,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
+            >
+              {item.label}
+            </a>
+          ))}
 
           {/* Quiz nav link with proficiency badge */}
           <Link
@@ -186,21 +163,41 @@ export default function Header() {
             )}
           </Link>
 
+          {/* System Design — case studies & architecture */}
+          <Link
+            to="/case-studies"
+            className="nav-link"
+            style={{
+              color: location.pathname.startsWith('/case-studies') ? 'var(--blueprint)' : 'var(--ink-soft)',
+              textDecoration: 'none',
+              transition: 'color 0.15s',
+              position: 'relative',
+              paddingBottom: 2,
+              fontWeight: location.pathname.startsWith('/case-studies') ? 600 : 400,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+            onMouseLeave={e => { if (!location.pathname.startsWith('/case-studies')) e.currentTarget.style.color = 'var(--ink-soft)'; }}
+          >
+            System Design
+          </Link>
+
+          {/* System Design Draw — whiteboard canvas tool */}
           <Link
             to="/whiteboard"
             className="nav-link"
             style={{
-              color: 'var(--blueprint)',
+              color: location.pathname === '/whiteboard' ? 'var(--terminal-green)' : 'var(--terminal-green)',
               fontWeight: 800,
               textDecoration: 'none',
               transition: 'color 0.15s, text-shadow 0.15s',
               position: 'relative',
               paddingBottom: 2,
+              opacity: location.pathname === '/whiteboard' ? 1 : 0.8,
             }}
-            onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint-bright)'; e.currentTarget.style.textShadow = '0 0 12px var(--blueprint-tint-strong)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'var(--blueprint)'; e.currentTarget.style.textShadow = 'none'; }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.textShadow = '0 0 12px rgba(57, 185, 80, 0.3)'; }}
+            onMouseLeave={e => { if (location.pathname !== '/whiteboard') e.currentTarget.style.opacity = '0.8'; e.currentTarget.style.textShadow = 'none'; }}
           >
-            System Design Draw
+            Draw
           </Link>
 
           <button
@@ -320,10 +317,10 @@ export default function Header() {
             K8s Quiz
           </Link>
           <Link to="/case-studies" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
-            Case Studies
+            System Design
           </Link>
-          <Link to="/whiteboard" onClick={() => setMobileOpen(false)} style={mobileLink('var(--blueprint)', 700)}>
-            System Design Draw
+          <Link to="/whiteboard" onClick={() => setMobileOpen(false)} style={mobileLink('var(--terminal-green)', 700)}>
+            Draw (Whiteboard)
           </Link>
         </div>
       )}
