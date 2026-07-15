@@ -1,14 +1,25 @@
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PHASES } from '../../data/phases';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import StatusDot from '../ui/StatusDot';
 import { useProgress } from '../../context/ProgressContext';
+import { useQuiz } from '../../context/QuizContext';
 import AsciiRule from '../ui/AsciiRule';
 
 export default function TOC() {
   const { ref, isVisible } = useScrollReveal(0.05);
   const { isCompleted } = useProgress();
+  const { proficiency, overallStats } = useQuiz();
   const navigate = useNavigate();
+  const totalLessons = useMemo(() => PHASES.reduce((sum, p) => sum + p.lessonIds.length, 0), []);
+
+  const profColors: Record<string, string> = {
+    start: 'var(--terminal-green)',
+    intermediate: 'var(--blueprint)',
+    advanced: 'var(--terminal-yellow)',
+    expert: 'var(--terminal-red)',
+  };
 
   function getPhaseStatus(phaseId: string) {
     const phase = PHASES.find(p => p.id === phaseId);
@@ -27,7 +38,18 @@ export default function TOC() {
           Curriculum
         </h2>
         <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', color: 'var(--ink-mute)', textTransform: 'uppercase', marginBottom: 24 }}>
-          10 Phases · 70 Lessons · Beginner → Wizard
+          {PHASES.length} Phases · {totalLessons} Lessons · Beginner → Wizard
+          {overallStats.total > 0 && (
+            <span style={{ fontSize: '0.78rem', marginLeft: 16 }}>
+              Proficiency:{' '}
+              <span style={{ color: profColors[proficiency], fontWeight: 600 }}>
+                {proficiency.charAt(0).toUpperCase() + proficiency.slice(1)}
+              </span>
+              <span style={{ color: 'var(--ink-mute)', fontSize: '0.7rem', marginLeft: 6 }}>
+                ({overallStats.correct}/{overallStats.total} quiz questions)
+              </span>
+            </span>
+          )}
         </p>
 
         <div style={{ display: 'flex', gap: 16, fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', textTransform: 'uppercase', marginBottom: 32 }}>

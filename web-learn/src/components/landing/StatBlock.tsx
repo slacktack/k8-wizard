@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-
-const statsConfig = [
-  { label: 'Modules', value: '8' },
-  { label: 'Lessons', value: '58' },
-  { label: 'Commands', value: '120+' },
-  { label: 'Projects', value: '5' },
-];
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { PHASES } from '../../data/phases';
 
 export default function StatBlock() {
+  const statsConfig = useMemo(() => [
+    { label: 'Modules', value: String(PHASES.length) },
+    { label: 'Lessons', value: String(PHASES.reduce((sum, p) => sum + p.lessonIds.length, 0)) },
+    { label: 'Commands', value: '120+' },
+    { label: 'Projects', value: '5' },
+  ], []);
   const barRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visible, setVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

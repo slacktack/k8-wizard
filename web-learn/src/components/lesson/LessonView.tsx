@@ -7,6 +7,8 @@ import TableBlock from './TableBlock';
 import DiagramBlock from './DiagramBlock';
 import UMLDiagram, { DOCKER_BUILD_UML, K8_ARCHITECTURE_UML } from '../tui/UMLDiagram';
 import ArchitectureDiagram from '../diagram/ArchitectureDiagram';
+import QuizBlock from '../quiz/QuizBlock';
+import { useQuiz } from '../../context/QuizContext';
 import { ARCHITECTURES } from '../../data/architectures';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 
@@ -32,6 +34,8 @@ function RevealSection({ children, delay = 0 }: { children: React.ReactNode; del
 }
 
 export default function LessonView({ lesson }: LessonViewProps) {
+  const { recordResult } = useQuiz();
+
   return (
     <article className="lesson-article" style={{ paddingTop: 28, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
       {/* Sections */}
@@ -129,6 +133,16 @@ export default function LessonView({ lesson }: LessonViewProps) {
                 >
                   {section.body}
                 </div>
+              </RevealSection>
+            );
+          case 'quiz':
+            return (
+              <RevealSection key={i} delay={delay}>
+                <QuizBlock
+                  questions={section.questions}
+                  title={section.title}
+                  onComplete={(correct, total) => recordResult(lesson.id, correct, total)}
+                />
               </RevealSection>
             );
           case 'warning':

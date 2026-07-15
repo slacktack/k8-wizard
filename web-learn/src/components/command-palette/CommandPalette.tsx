@@ -154,7 +154,7 @@ export default function CommandPalette() {
             value={query}
             onChange={e => { setQuery(e.target.value); setSelectedIndex(0); }}
             onKeyDown={handleKeyDown}
-            placeholder="Search 76 lessons..."
+            placeholder="Search 75 lessons..."
             style={{
               flex: 1,
               fontFamily: "'JetBrains Mono', monospace",

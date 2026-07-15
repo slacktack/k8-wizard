@@ -8,7 +8,7 @@ export function useKeyboard() {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        isOpen ? closePalette() : openPalette();
+        if (isOpen) { closePalette(); } else { openPalette(); }
       }
       if (e.key === 'Escape' && isOpen) {
         closePalette();

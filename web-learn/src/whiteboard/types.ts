@@ -30,6 +30,8 @@ export interface Element {
   text?: string;
   /** centered label drawn inside a shape (system-design component name) */
   label?: string;
+  /** dash pattern for dashed lines, e.g. '4 3' */
+  strokeDasharray?: string;
 }
 
 /** Camera maps world → screen: screen = world * zoom + pan. */

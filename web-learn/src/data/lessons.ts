@@ -2260,11 +2260,11 @@ spec:
         ['No logs in Grafana', 'Check promtail/daemonset logs, ensure correct labels and Loki target reachable'],
       ]},
 
-      { type: 'heading', level: 3, text: 'Quiz' },
-      { type: 'table', headers: ['Question', 'Answer'], rows: [
-        ['What protocol does Prometheus use to collect metrics?', 'HTTP pull (scrape)'],
-        ['Where do structured logs help most?', 'Facilitate parsing, filtering and labels in Loki/Grafana'],
-        ['What does an OTLP collector do?', 'Receives traces/metrics/logs and forwards to storage/backends'],
+      { type: 'quiz', title: 'Knowledge Check', questions: [
+        { type: 'fill-blank', question: 'What protocol does Prometheus use to collect metrics? (pull/push)', answer: 'pull', explanation: 'Prometheus uses a pull model — it scrapes metrics endpoints at regular intervals.' },
+        { type: 'multiple-choice', question: 'Which component is responsible for log aggregation in the observability stack?', options: ['Prometheus', 'Grafana', 'Loki', 'AlertManager'], correctIndex: 2, explanation: 'Loki is the log aggregation system, designed to work seamlessly with Grafana.' },
+        { type: 'multiple-choice', question: 'What is the primary role of the OpenTelemetry Collector?', options: ['Store metrics long-term', 'Receive, process, and export telemetry data', 'Replace Prometheus entirely', 'Manage Kubernetes secrets'], correctIndex: 1, explanation: 'The OTel Collector receives traces, metrics, and logs from instrumented apps and forwards them to configured backends.' },
+        { type: 'true-false', question: 'Prometheus uses a push-based model where apps must actively send metrics to it.', correctAnswer: false, explanation: 'Prometheus uses a pull model — it scrapes HTTP endpoints exposed by applications.' },
       ]},
     ],
     commands: ['helm install kube-prometheus-stack', 'helm install loki', 'kubectl apply -f observability-app-deploy.yaml', 'kubectl port-forward'],
@@ -2355,11 +2355,11 @@ spec:
         ['Trivy shows many CVEs', 'Consider using distroless/minimal base images and rebuild dependencies'],
       ]},
 
-      { type: 'heading', level: 3, text: 'Quiz' },
-      { type: 'table', headers: ['Question', 'Answer'], rows: [
-        ['What does readOnlyRootFilesystem do?', 'Prevents writes to container root FS — reduces attack surface'],
-        ['Where are K8s Secrets stored by default?', 'etcd (base64-encoded) — not encrypted by default'],
-        ['What exit code should Trivy use to fail CI on critical CVEs?', 'Use non-zero when critical CVEs are present (CI configuration)'],
+      { type: 'quiz', title: 'Security Knowledge Check', questions: [
+        { type: 'multiple-choice', question: 'What does readOnlyRootFilesystem do?', options: ['Allows writes only to tmpfs mounts', 'Prevents writes to container root FS — reduces attack surface', 'Makes the entire container immutable', 'Disables network access'], correctIndex: 1, explanation: 'readOnlyRootFilesystem prevents writes to the container root filesystem, forcing all writes to declared volume mounts.' },
+        { type: 'multiple-choice', question: 'Where are Kubernetes Secrets stored by default?', options: ['In the container image', 'In etcd (base64-encoded)', 'In a database', 'In ConfigMaps'], correctIndex: 1, explanation: 'Secrets are stored in etcd as base64-encoded data. They are not encrypted by default — use encryption at rest for production.' },
+        { type: 'true-false', question: 'Trivy should exit with code 0 even when critical CVEs are found.', correctAnswer: false, explanation: 'Trivy should exit non-zero when configured severity thresholds are exceeded to fail the CI pipeline.' },
+        { type: 'fill-blank', question: 'What directive in a SecurityContext removes all Linux capabilities from a container?', answer: 'capabilities.drop: ["ALL"]', explanation: 'Setting capabilities.drop to ["ALL"] removes every capability, implementing the principle of least privilege.' },
       ]},
     ],
     commands: ['kubectl apply -f secure-deployment.yaml', 'trivy image <image>', 'kubectl create secret docker-registry'],
@@ -2586,10 +2586,11 @@ data:
         ['Controller not seeing resources', 'Check RBAC: serviceaccount needs permissions to list/watch backups (create Role/RoleBinding)'],
       ]},
 
-      { type: 'heading', level: 3, text: 'Quiz' },
-      { type: 'table', headers: ['Question', 'Answer'], rows: [
-        ['What Kubernetes object defines a new API kind?', 'CustomResourceDefinition (CRD)'],
-        ['What does an operator typically implement?', 'A control loop (reconciler) that ensures desired state for custom resources'],
+      { type: 'quiz', title: 'Operators Knowledge Check', questions: [
+        { type: 'multiple-choice', question: 'What Kubernetes object defines a new API kind?', options: ['APIService', 'CustomResourceDefinition', 'ValidatingWebhookConfiguration', 'ClusterRole'], correctIndex: 1, explanation: 'A CustomResourceDefinition (CRD) extends the Kubernetes API by adding a new resource type.' },
+        { type: 'multiple-choice', question: 'What does an operator typically implement?', options: ['A CRUD REST API', 'A reconciliation loop for custom resources', 'A database migration tool', 'A CI/CD pipeline'], correctIndex: 1, explanation: 'An operator implements a reconciliation loop that watches custom resources and ensures actual state matches desired state.' },
+        { type: 'true-false', question: 'A CRD alone provides automatic reconciliation logic for custom resources.', correctAnswer: false, explanation: 'A CRD only defines the schema. You must also write a controller/operator that watches and reconciles those resources.' },
+        { type: 'fill-blank', question: 'What tool is commonly used to scaffold Go-based Kubernetes operators?', answer: 'kubebuilder', explanation: 'kubebuilder (and the Operator SDK built on it) is the standard tool for scaffolding Kubernetes operators in Go.' },
       ]},
     ],
     commands: ['kubectl apply -f backup-crd.yaml', 'kubectl apply -f backup-sample.yaml', 'kubectl run backup-controller'],

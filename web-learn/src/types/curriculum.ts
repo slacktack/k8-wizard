@@ -14,6 +14,11 @@ export interface Phase {
 export type LessonType = 'learn' | 'build' | 'capstone';
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced' | 'expert';
 
+export type QuizQuestion =
+  | { type: 'multiple-choice'; question: string; options: string[]; correctIndex: number; explanation?: string }
+  | { type: 'fill-blank'; question: string; answer: string; explanation?: string }
+  | { type: 'true-false'; question: string; correctAnswer: boolean; explanation?: string };
+
 export type LessonSection =
   | { type: 'text'; body: string }
   | { type: 'heading'; level: 2 | 3; text: string }
@@ -24,7 +29,8 @@ export type LessonSection =
   | { type: 'diagram'; lines: string[] }
   | { type: 'uml'; preset: string; title?: string }
   | { type: 'note'; body: string }
-  | { type: 'warning'; body: string };
+  | { type: 'warning'; body: string }
+  | { type: 'quiz'; title?: string; questions: QuizQuestion[] };
 
 export interface Lesson {
   id: string;

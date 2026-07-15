@@ -2,6 +2,7 @@ import type { Lesson, Phase, LessonSection } from '../../types/curriculum';
 import UMLDiagram, { DOCKER_BUILD_UML } from '../tui/UMLDiagram';
 import { useState } from 'react';
 import { useProgress } from '../../context/ProgressContext';
+import { showProgressToast } from '../ui/ProgressToast';
 
 interface LessonSidebarProps {
   lesson: Lesson;
@@ -71,7 +72,17 @@ export default function LessonSidebar({ lesson, phase, lessonIndex }: LessonSide
           </div>
         </div>
         <button
-          onClick={() => toggleLesson(lesson.id)}
+          onClick={() => {
+            const wasCompleted = isCompleted(lesson.id);
+            toggleLesson(lesson.id);
+            if (!wasCompleted) {
+              const nextIdx = lessonIndex + 1;
+              const nextId = nextIdx < phase.lessonIds.length ? phase.lessonIds[nextIdx] : null;
+              if (nextId) {
+                showProgressToast(lesson.title, `/lesson/${phase.id}/${nextId}`);
+              }
+            }
+          }}
           style={{
             marginTop: 12,
             width: '100%',

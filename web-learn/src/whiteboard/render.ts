@@ -83,6 +83,11 @@ export function drawElement(ctx: CanvasRenderingContext2D, el: Element): void {
   ctx.lineWidth = el.strokeWidth;
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
+  if (el.strokeDasharray) {
+    ctx.setLineDash(el.strokeDasharray.split(' ').map(Number));
+  } else {
+    ctx.setLineDash([]);
+  }
 
   switch (el.type) {
     case 'rectangle': {
