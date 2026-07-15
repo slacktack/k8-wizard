@@ -2141,6 +2141,460 @@ spec:
   // ================================================================
   // PHASE 08 — Production
   // ================================================================
+
+  // ---------------------------------------------------------------
+  // Additional observability lab tying Prometheus/Grafana/Loki/OTel
+  // ---------------------------------------------------------------
+  '07-07-observability-lab': {
+    id: '07-07-observability-lab',
+    phaseId: '07-monitoring',
+    number: 7,
+    title: 'Observability Lab: Metrics, Logs & Traces',
+    type: 'capstone',
+    difficulty: 'advanced',
+    duration: '30 min',
+    sections: [
+      { type: 'heading', level: 2, text: 'Learning Objectives' },
+      { type: 'table', headers: ['You will be able to', 'Why it matters'], rows: [
+        ['Install a Prometheus + Grafana stack', 'Collect and visualize metrics from cluster and app'],
+        ['Aggregate logs with Loki and query them from Grafana', 'Centralized logs speed debugging'],
+        ['Send traces using OpenTelemetry and view them in collector logs', 'Understand request flow across services'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Key Concepts' },
+      { type: 'table', headers: ['Concept', 'Short summary'], rows: [
+        ['Prometheus', 'Pull-based metrics collection (metrics endpoint, scrape configs)'],
+        ['Grafana', 'Dashboarding and alert visualization'],
+        ['Loki + Promtail', 'Log aggregation (labels-based index)'],
+        ['OpenTelemetry Collector', 'Receives traces/metrics/logs and forwards to backends'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Hands-on Lab' },
+      { type: 'text', body: 'Run the kube-prometheus-stack, deploy Loki, instrument a tiny app, and verify metrics, logs, and traces flow to Grafana.' },
+      { type: 'command', prompt: '$', cmd: 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts' },
+      { type: 'command', prompt: '$', cmd: 'helm repo add grafana https://grafana.github.io/helm-charts' },
+      { type: 'command', prompt: '$', cmd: 'helm repo update' },
+      { type: 'command', prompt: '$', cmd: 'helm install monitoring prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace' },
+      { type: 'command', prompt: '$', cmd: 'helm install loki grafana/loki-stack --namespace monitoring --set grafana.enabled=false --set prometheus.enabled=false' },
+      { type: 'command', prompt: '$', cmd: 'kubectl -n monitoring port-forward svc/monitoring-grafana 3000:80 &>/dev/null &' },
+
+      { type: 'heading', level: 3, text: 'Instrument a simple app (HTTP + metrics + logs + OTLP)' },
+      { type: 'code', language: 'javascript', code: `// simple-express_instrumented.js
+const express = require('express');
+const prom = require('prom-client');
+const app = express();
+const collectDefaultMetrics = prom.collectDefaultMetrics;
+collectDefaultMetrics({ timeout: 5000 });
+const httpRequestDurationMicroseconds = new prom.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  buckets: [0.1, 0.3, 0.5, 1, 2, 5]
+});
+
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', prom.register.contentType);
+  res.end(await prom.register.metrics());
+});
+
+app.get('/hello', (req, res) => {
+  const end = httpRequestDurationMicroseconds.startTimer();
+  console.log(JSON.stringify({ level: 'info', msg: 'hello requested' }));
+  res.send('Hello Observability');
+  end();
+});
+
+app.listen(8080, () => console.log('app listening 8080'));
+`},
+      { type: 'yaml', filename: 'observability-app-deploy.yaml', code: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: obs-app
+  labels:
+    app: obs-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: obs-app
+  template:
+    metadata:
+      labels:
+        app: obs-app
+    spec:
+      containers:
+        - name: app
+          image: node:20-alpine
+          command: ["sh","-c","apk add --no-cache nodejs npm \n&& npm init -y \n&& npm i prom-client express \n&& node simple-express_instrumented.js"]
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: obs-app
+spec:
+  selector:
+    app: obs-app
+  ports:
+    - port: 80
+      targetPort: 8080
+`},
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f observability-app-deploy.yaml' },
+      { type: 'command', prompt: '$', cmd: 'kubectl port-forward svc/obs-app 8080:80 &>/dev/null &' },
+      { type: 'command', prompt: '$', cmd: 'curl http://localhost:8080/hello' },
+
+      { type: 'heading', level: 3, text: 'Verify metrics in Prometheus' },
+      { type: 'command', prompt: '$', cmd: 'kubectl -n monitoring port-forward svc/monitoring-prometheus 9090:9090 &>/dev/null &' },
+      { type: 'command', prompt: '$', cmd: 'open http://localhost:9090/graph (or visit in browser) — query: rate(http_request_duration_seconds[5m])' },
+
+      { type: 'heading', level: 3, text: 'Query logs in Grafana (Loki) and create a dashboard' },
+      { type: 'text', body: 'In Grafana Explore choose Loki and run a query: {app="obs-app"} |= "hello requested"' },
+
+      { type: 'heading', level: 3, text: 'Traces (OpenTelemetry)' },
+      { type: 'text', body: 'For this lab the OpenTelemetry collector was installed by previous lessons. Configure your app to export OTLP to collector (example not included here to keep the container small). You can verify collector logs and exported traces in Grafana Tempo or OTEL exporter output.' },
+
+      { type: 'heading', level: 2, text: 'Troubleshooting' },
+      { type: 'table', headers: ['Problem', 'What to check'], rows: [
+        ['No metrics on /metrics', 'kubectl logs obs-app, ensure prom-client registered and /metrics endpoint reachable'],
+        ['Prometheus scrape not showing target', 'kubectl -n monitoring get servicemonitor,podmonitor ; check Prometheus targets page'],
+        ['No logs in Grafana', 'Check promtail/daemonset logs, ensure correct labels and Loki target reachable'],
+      ]},
+
+      { type: 'heading', level: 3, text: 'Quiz' },
+      { type: 'table', headers: ['Question', 'Answer'], rows: [
+        ['What protocol does Prometheus use to collect metrics?', 'HTTP pull (scrape)'],
+        ['Where do structured logs help most?', 'Facilitate parsing, filtering and labels in Loki/Grafana'],
+        ['What does an OTLP collector do?', 'Receives traces/metrics/logs and forwards to storage/backends'],
+      ]},
+    ],
+    commands: ['helm install kube-prometheus-stack', 'helm install loki', 'kubectl apply -f observability-app-deploy.yaml', 'kubectl port-forward'],
+  },
+
+  // ---------------------------------------------------------------
+  // Security: SecurityContext, Image Scanning & Hardening
+  // ---------------------------------------------------------------
+  '08-07-security-hardening': {
+    id: '08-07-security-hardening',
+    phaseId: '08-production',
+    number: 7,
+    title: 'Security Hardening: SecurityContext, Image Scanning & Best Practices',
+    type: 'learn',
+    difficulty: 'expert',
+    duration: '25 min',
+    sections: [
+      { type: 'heading', level: 2, text: 'Learning Objectives' },
+      { type: 'table', headers: ['You will be able to', 'Why it matters'], rows: [
+        ['Harden pods using SecurityContext and Pod spec fields', 'Reduce attack surface and enforce least privilege'],
+        ['Scan container images for vulnerabilities using Trivy', 'Catch CVEs before they reach cluster'],
+        ['Use imagePullSecrets and private registries securely', 'Protect access to private images'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Key Concepts' },
+      { type: 'table', headers: ['Concept', 'Summary'], rows: [
+        ['SecurityContext', 'Pod/container-level security settings (runAsUser, capabilities, readOnlyRootFilesystem)'],
+        ['Image Scanning', 'Static analysis of container image layers for CVEs'],
+        ['Admission Controllers', 'Enforce policies at object create/update time (e.g., OPA/Gatekeeper, Kyverno)'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Hands-on: SecurityContext & Trivy scan' },
+      { type: 'yaml', filename: 'secure-deployment.yaml', code: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secure-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: secure-app
+  template:
+    metadata:
+      labels:
+        app: secure-app
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+      containers:
+        - name: app
+          image: nginx:alpine
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+`},
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f secure-deployment.yaml' },
+      { type: 'command', prompt: '$', cmd: 'kubectl describe deployment secure-app' },
+
+      { type: 'heading', level: 3, text: 'Image Scanning with Trivy (Local)' },
+      { type: 'command', prompt: '$', cmd: 'brew install aquasecurity/trivy/trivy || curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh' },
+      { type: 'command', prompt: '$', cmd: 'trivy image nginx:alpine' },
+      { type: 'text', body: 'Interpret the output: Critical/High/Medium CVEs should be remediated by updating base image or applying patches.' },
+
+      { type: 'heading', level: 3, text: 'Using imagePullSecrets' },
+      { type: 'command', prompt: '$', cmd: 'kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=MYUSER --docker-password=MYTOKEN --docker-email=me@example.com' },
+      { type: 'yaml', filename: 'private-deploy.yaml', code: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: private-app
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: app
+          image: ghcr.io/myorg/private-app:latest`},
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f private-deploy.yaml' },
+
+      { type: 'heading', level: 2, text: 'Troubleshooting' },
+      { type: 'table', headers: ['Problem', 'What to check'], rows: [
+        ['Pod fails to start with imagePullBackOff', 'kubectl describe pod -> ImagePullBackOff; check imagePullSecrets and registry credentials'],
+        ['SecurityContext not applied', 'Check PodSpec vs Container securityContext precedence and admission controllers denying fields'],
+        ['Trivy shows many CVEs', 'Consider using distroless/minimal base images and rebuild dependencies'],
+      ]},
+
+      { type: 'heading', level: 3, text: 'Quiz' },
+      { type: 'table', headers: ['Question', 'Answer'], rows: [
+        ['What does readOnlyRootFilesystem do?', 'Prevents writes to container root FS — reduces attack surface'],
+        ['Where are K8s Secrets stored by default?', 'etcd (base64-encoded) — not encrypted by default'],
+        ['What exit code should Trivy use to fail CI on critical CVEs?', 'Use non-zero when critical CVEs are present (CI configuration)'],
+      ]},
+    ],
+    commands: ['kubectl apply -f secure-deployment.yaml', 'trivy image <image>', 'kubectl create secret docker-registry'],
+  },
+
+  // ---------------------------------------------------------------
+  // Helm: charts and packaging
+  // ---------------------------------------------------------------
+  '08-08-helm-basics': {
+    id: '08-08-helm-basics',
+    phaseId: '08-production',
+    number: 8,
+    title: 'Helm: Charts, Templates & Releases',
+    type: 'build',
+    difficulty: 'intermediate',
+    duration: '20 min',
+    sections: [
+      { type: 'heading', level: 2, text: 'Learning Objectives' },
+      { type: 'table', headers: ['You will be able to', 'Why it matters'], rows: [
+        ['Create a simple Helm chart', 'Package and templatize Kubernetes manifests for reuse'],
+        ['Install and upgrade releases', 'Manage environment-specific values'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Key Concepts' },
+      { type: 'table', headers: ['Concept', 'Summary'], rows: [
+        ['Chart', 'A collection of templated manifests and metadata'],
+        ['Release', 'An installed instance of a chart'],
+        ['values.yaml', 'Default configuration for templates'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Hands-on: Create and Install a Chart' },
+      { type: 'command', prompt: '$', cmd: 'helm create mychart' },
+      { type: 'text', body: 'Edit Chart.yaml and values.yaml then install:' },
+      { type: 'command', prompt: '$', cmd: 'helm install myapp ./mychart --namespace myapp --create-namespace' },
+      { type: 'command', prompt: '$', cmd: 'helm list -n myapp' },
+      { type: 'command', prompt: '$', cmd: 'helm upgrade myapp ./mychart -n myapp --set replicaCount=3' },
+
+      { type: 'heading', level: 2, text: 'Packaging & Repositories' },
+      { type: 'command', prompt: '$', cmd: 'helm package mychart' },
+      { type: 'command', prompt: '$', cmd: 'helm repo index ./ && helm repo add local file://$(pwd) && helm repo update' },
+
+      { type: 'heading', level: 2, text: 'Troubleshooting' },
+      { type: 'table', headers: ['Problem', 'What to check'], rows: [
+        ['Helm template fails to render', 'helm template ./mychart --values values.yaml to debug templates and missing values'],
+        ['Upgrade fails with resource conflict', 'kubectl get events and helm history to inspect reason — may need --force or manual cleanup'],
+      ]},
+
+      { type: 'heading', level: 3, text: 'Quiz' },
+      { type: 'table', headers: ['Question', 'Answer'], rows: [
+        ['What command shows rendered manifests without installing?', 'helm template'],
+        ['Where do you override defaults for different environments?', 'values.yaml or --set/--values on install/upgrade'],
+      ]},
+    ],
+    commands: ['helm create', 'helm install', 'helm upgrade', 'helm package'],
+  },
+
+  // ---------------------------------------------------------------
+  // Scheduling: Affinity, Anti-affinity & PodDisruptionBudget
+  // ---------------------------------------------------------------
+  '09-07-affinity-pdbs': {
+    id: '09-07-affinity-pdbs',
+    phaseId: '09-advanced-workloads',
+    number: 7,
+    title: 'Affinity, Anti-Affinity & PodDisruptionBudgets',
+    type: 'learn',
+    difficulty: 'advanced',
+    duration: '20 min',
+    sections: [
+      { type: 'heading', level: 2, text: 'Learning Objectives' },
+      { type: 'table', headers: ['You will be able to', 'Why it matters'], rows: [
+        ['Use affinity/anti-affinity to influence scheduling', 'Place pods for locality or spread across failure domains'],
+        ['Use PDBs to control voluntary disruptions', 'Maintain minimum availability during upgrades and maintenance'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Key Concepts' },
+      { type: 'table', headers: ['Concept', 'Summary'], rows: [
+        ['nodeAffinity', 'Prefer or require scheduling on nodes with labels'],
+        ['podAffinity / podAntiAffinity', 'Co-locate or separate pods based on labels'],
+        ['PodDisruptionBudget (PDB)', 'Controls allowed voluntary evictions'],
+      ]},
+
+      { type: 'yaml', filename: 'affinity-deploy.yaml', code: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aff-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aff-app
+  template:
+    metadata:
+      labels:
+        app: aff-app
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - aff-app
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: app
+          image: nginx:alpine`},
+
+      { type: 'yaml', filename: 'pdb.yaml', code: `apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: aff-app-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: aff-app`},
+
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f affinity-deploy.yaml && kubectl apply -f pdb.yaml' },
+
+      { type: 'heading', level: 2, text: 'Troubleshooting' },
+      { type: 'table', headers: ['Problem', 'What to check'], rows: [
+        ['Pods pending after affinity rules', 'kubectl describe pod -> check events: "0/3 nodes match"; verify node labels and topologyKey'],
+        ['Evictions blocked by PDB', 'kubectl get pdb -> if minAvailable prevents eviction, consider increase replicas or lower minAvailable'],
+      ]},
+
+      { type: 'heading', level: 3, text: 'Quiz' },
+      { type: 'table', headers: ['Question', 'Answer'], rows: [
+        ['What does podAntiAffinity with topologyKey=hostname achieve?', 'It spreads pods across nodes to avoid colocation'],
+        ['If you set minAvailable: 100% in PDB what happens?', 'No voluntary evictions are allowed — upgrades may be disrupted'],
+      ]},
+    ],
+    commands: ['kubectl apply -f affinity-deploy.yaml', 'kubectl apply -f pdb.yaml', 'kubectl describe pod', 'kubectl get pdb'],
+  },
+
+  // ---------------------------------------------------------------
+  // CRDs & Operators Lab (complements existing CRD lesson)
+  // ---------------------------------------------------------------
+  '10-07-operators-lab': {
+    id: '10-07-operators-lab',
+    phaseId: '10-extending-k8s',
+    number: 7,
+    title: 'Operators Lab: CRD, Controller & Simple Backup Operator',
+    type: 'capstone',
+    difficulty: 'expert',
+    duration: '30 min',
+    sections: [
+      { type: 'heading', level: 2, text: 'Learning Objectives' },
+      { type: 'table', headers: ['You will be able to', 'Why it matters'], rows: [
+        ['Create and apply a CRD', 'Extend Kubernetes API for custom resources'],
+        ['Deploy a simple operator (example using kubectl-based controller)', 'Automate operational tasks for custom resources'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Key Concepts' },
+      { type: 'table', headers: ['Concept', 'Summary'], rows: [
+        ['CRD', 'CustomResourceDefinition adds a new API kind'],
+        ['Controller / Operator', 'Reconciler loop that ensures desired state is met'],
+        ['kubebuilder / Operator SDK', 'Tooling to build Go-based operators (not required for this lab)'],
+      ]},
+
+      { type: 'heading', level: 2, text: 'Hands-on: Simple Backup CRD and Controller (kubectl-based)' },
+      { type: 'yaml', filename: 'backup-crd.yaml', code: `apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: backups.example.com
+spec:
+  group: example.com
+  scope: Namespaced
+  names:
+    plural: backups
+    singular: backup
+    kind: Backup
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                source:
+                  type: string
+                schedule:
+                  type: string`},
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f backup-crd.yaml' },
+
+      { type: 'yaml', filename: 'backup-sample.yaml', code: `apiVersion: example.com/v1
+kind: Backup
+metadata:
+  name: sample-backup
+spec:
+  source: mysql://user:pass@mysql.default.svc.cluster.local:3306/db
+  schedule: "@daily"`},
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f backup-sample.yaml' },
+
+      { type: 'text', body: 'For this simple lab, use a CronJob to act on Backup objects by reading them with kubectl in a script. A full operator would watch the API and reconcile automatically (use Operator SDK for production).' },
+
+      { type: 'yaml', filename: 'backup-controller-cm.yaml', code: `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-controller
+data:
+  run.sh: |
+    #!/bin/sh
+    while true; do
+      for name in $(kubectl get backups -o jsonpath="{.items[*].metadata.name}"); do
+        echo "Found Backup: $name"
+        kubectl get backup $name -o yaml
+        # Here you would trigger real backup logic (Velero, mysqldump, etc.)
+      done
+      sleep 60
+    done`},
+      { type: 'command', prompt: '$', cmd: 'kubectl apply -f backup-controller-cm.yaml && kubectl run backup-controller --restart=Never --image=bitnami/kubectl:latest -- bash -c "while true; do kubectl get backups || true; sleep 60; done"' },
+
+      { type: 'heading', level: 2, text: 'Troubleshooting' },
+      { type: 'table', headers: ['Problem', 'What to check'], rows: [
+        ['CRD not served', 'kubectl get crd backups.example.com -o yaml ; check .status.conditions'],
+        ['Controller not seeing resources', 'Check RBAC: serviceaccount needs permissions to list/watch backups (create Role/RoleBinding)'],
+      ]},
+
+      { type: 'heading', level: 3, text: 'Quiz' },
+      { type: 'table', headers: ['Question', 'Answer'], rows: [
+        ['What Kubernetes object defines a new API kind?', 'CustomResourceDefinition (CRD)'],
+        ['What does an operator typically implement?', 'A control loop (reconciler) that ensures desired state for custom resources'],
+      ]},
+    ],
+    commands: ['kubectl apply -f backup-crd.yaml', 'kubectl apply -f backup-sample.yaml', 'kubectl run backup-controller'],
+  },
+
   '08-01-rbac': {
     id: '08-01-rbac',
     phaseId: '08-production',
