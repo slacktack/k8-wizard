@@ -114,6 +114,7 @@ export const PHASES: Phase[] = [
       '07-04-alertmanager',
       '07-05-k8s-events',
       '07-06-red-use-methods',
+      '07-07-observability-lab',
     ],
   },
   {
@@ -129,6 +130,8 @@ export const PHASES: Phase[] = [
       '08-04-secrets-management',
       '08-05-cicd-argocd',
       '08-06-cost-optimization',
+      '08-07-security-hardening',
+      '08-08-helm-basics',
     ],
   },
   {
@@ -144,6 +147,7 @@ export const PHASES: Phase[] = [
       '09-04-topology-spread',
       '09-05-priority-preemption',
       '09-06-init-sidecar-ephemeral',
+      '09-07-affinity-pdbs',
     ],
   },
   {
@@ -159,6 +163,7 @@ export const PHASES: Phase[] = [
       '10-04-kyverno-opa',
       '10-05-multi-cluster',
       '10-06-k8s-api-deep-dive',
+      '10-07-operators-lab',
     ],
   },
 ];
