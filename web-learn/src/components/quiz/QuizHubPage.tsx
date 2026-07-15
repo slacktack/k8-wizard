@@ -20,6 +20,11 @@ const profLabels: Record<string, string> = {
   expert: 'Expert',
 };
 
+const STANDALONE_QUIZZES = [
+  { id: 'standalone-docker', label: 'Docker', topic: 'docker', icon: '🐳', desc: '50 questions · beginner to expert · containers, Dockerfiles, networking, Compose, production', color: 'var(--terminal-cyan)' },
+  { id: 'standalone-kubernetes', label: 'Kubernetes', topic: 'kubernetes', icon: '☸', desc: '55 questions · beginner to expert · Pods, networking, security, GitOps, service mesh', color: 'var(--blueprint)' },
+] as const;
+
 export default function QuizHubPage() {
   const { results, overallStats, proficiency } = useQuiz();
 
@@ -66,6 +71,61 @@ export default function QuizHubPage() {
             Test your knowledge · Track your proficiency
           </p>
 
+          {/* Specialized Quizzes section */}
+          <div style={{ marginBottom: 36 }}>
+            <h2 style={{ fontFamily: "'VT323', monospace", fontSize: '1.3rem', color: 'var(--blueprint)', marginBottom: 14 }}>
+              Specialized Assessments
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {STANDALONE_QUIZZES.map(q => {
+                const r = results[q.id];
+                const score = r ? { correct: r.correct, total: r.total } : null;
+                const scoreColor = score
+                  ? (score.correct >= Math.ceil(score.total * 0.9) ? 'var(--terminal-green)'
+                    : score.correct >= Math.ceil(score.total * 0.7) ? 'var(--terminal-yellow)'
+                    : score.correct >= Math.ceil(score.total * 0.4) ? 'var(--blueprint)'
+                    : 'var(--terminal-red)')
+                  : 'var(--ink-mute)';
+                return (
+                  <Link
+                    key={q.id}
+                    to={`/quiz/${q.topic}`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 14,
+                      padding: '16px 20px',
+                      border: '1px solid var(--rule)',
+                      background: 'var(--bg-elevated)',
+                      textDecoration: 'none',
+                      transition: 'border-color 0.15s, transform 0.15s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = q.color; e.currentTarget.style.transform = 'translateX(4px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--rule)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+                  >
+                    <span style={{ fontSize: '1.8rem' }}>{q.icon}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.92rem', fontWeight: 600, color: 'var(--ink)', marginBottom: 2 }}>{q.label}</div>
+                      <div style={{ fontFamily: "'Source Serif 4', serif", fontSize: '0.78rem', color: 'var(--ink-soft)' }}>{q.desc}</div>
+                    </div>
+                    {score ? (
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.82rem', fontWeight: 600, color: scoreColor, fontVariantNumeric: 'tabular-nums' }}>
+                        {score.correct}/{score.total}
+                      </div>
+                    ) : (
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: 'var(--ink-mute)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        Start
+                      </div>
+                    )}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-mute)" strokeWidth="2" style={{ flexShrink: 0 }}>
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Proficiency card */}
           <div style={{
             border: '2px solid var(--rule)',
@@ -104,7 +164,11 @@ export default function QuizHubPage() {
             </div>
           </div>
 
-          {/* Lesson list */}
+          {/* Per-Lesson Quizzes */}
+          <h2 style={{ fontFamily: "'VT323', monospace", fontSize: '1.3rem', color: 'var(--blueprint)', marginBottom: 14 }}>
+            Per-Lesson Quizzes
+          </h2>
+
           {lessonsWithQuizzes.length === 0 && (
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.82rem', color: 'var(--ink-mute)', textAlign: 'center', padding: 48 }}>
               No quizzes available yet. Quizzes are being added to lessons.
