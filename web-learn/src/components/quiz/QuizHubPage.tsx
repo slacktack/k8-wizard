@@ -127,7 +127,7 @@ export default function QuizHubPage() {
           </div>
 
           {/* Proficiency card */}
-          <div style={{
+          <div className="quiz-proficiency-row" style={{
             border: '2px solid var(--rule)',
             background: 'var(--bg-elevated)',
             padding: '24px 28px',
@@ -151,14 +151,14 @@ export default function QuizHubPage() {
                 </span>
               </div>
             </div>
-            <div style={{ textAlign: 'right' }}>
+            <div className="quiz-proficiency-stats" style={{ textAlign: 'right' }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--ink-mute)', marginBottom: 4 }}>
                 Quizzes Completed
               </div>
               <div style={{ fontFamily: "'VT323', monospace", fontSize: '1.8rem', color: 'var(--ink)' }}>
                 {attempted}/{total}
               </div>
-              <div style={{ height: 4, width: 120, marginLeft: 'auto', background: 'var(--rule-soft)', marginTop: 4 }}>
+              <div className="quiz-proficiency-bar" style={{ height: 4, width: 120, marginLeft: 'auto', background: 'var(--rule-soft)', marginTop: 4 }}>
                 <div style={{ height: '100%', width: `${pct}%`, background: 'var(--blueprint)', transition: 'width 0.4s ease' }} />
               </div>
             </div>

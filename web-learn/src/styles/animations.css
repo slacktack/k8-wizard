@@ -501,6 +501,54 @@
 
   /* Keep wide tables readable by letting them scroll instead of crushing */
   .lesson-table { min-width: 460px; }
+
+  /* ── Apps page mobile ── */
+  .apps-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .apps-tab { font-size: 0.65rem !important; padding: 8px 12px !important; white-space: nowrap; }
+  .apps-meta { flex-wrap: wrap !important; gap: 8px !important; }
+  .apps-meta span { font-size: 0.65rem !important; }
+
+  /* ── Quiz Hub mobile ── */
+  .quiz-proficiency-row { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  .quiz-proficiency-stats { text-align: left !important; width: 100%; }
+  .quiz-proficiency-bar { margin-left: 0 !important; }
+
+  /* ── Case studies mobile ── */
+  .case-study-header { flex-direction: column !important; align-items: flex-start !important; }
+  .case-study-meta { text-align: left !important; }
+
+  /* ── TOC phase rows mobile ── */
+  .phase-row {
+    grid-template-columns: 40px 1fr 50px auto !important;
+    gap: 8px !important;
+    padding: 12px 0 !important;
+  }
+  .phase-row .phase-number { font-size: 0.75rem !important; }
+  .phase-row .phase-title { font-size: 0.85rem !important; }
+  .phase-row .phase-count { font-size: 0.68rem !important; min-width: 36px !important; }
+  .phase-row .phase-dots { gap: 2px !important; }
+  .phase-row .phase-dots span { width: 7px !important; height: 7px !important; }
+
+  /* ── Header mobile ── */
+  .logo-text { font-size: 1rem !important; }
+
+  /* ── Whiteboard mobile ── */
+  .wb-palette { width: 100px !important; padding: 6px !important; }
+  .wb-palette button { font-size: 0.62rem !important; padding: 4px 6px !important; }
+
+  /* ── Architecture diagram mobile ── */
+  .arch-node { min-width: 80px !important; padding: 6px 10px !important; }
+  .arch-node > div:first-child { font-size: 0.68rem !important; }
+
+  /* ── Breadcrumb mobile ── */
+  .breadcrumb { font-size: 0.62rem !important; gap: 6px !important; flex-wrap: wrap !important; }
+
+  /* ── Standalone quiz page mobile ── */
+  .quiz-topic-card { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .quiz-topic-card .quiz-icon { font-size: 1.4rem !important; }
+
+  /* ── Trade-off cards mobile ── */
+  .tradeoff-columns { flex-direction: column !important; gap: 12px !important; }
 }
 
 /* ==============================

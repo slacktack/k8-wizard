@@ -45,11 +45,11 @@ export default function CaseStudyDetailPage() {
           </div>
 
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, marginBottom: 8 }}>
+          <div className="case-study-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, marginBottom: 8 }}>
             <h1 style={{ fontFamily: "'VT323', monospace", fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', color: 'var(--ink)', lineHeight: 1.1 }}>
               {cs.title}
             </h1>
-            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+            <div className="case-study-meta" style={{ textAlign: 'right', flexShrink: 0 }}>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: diffColors[cs.difficulty], border: `1px solid ${diffColors[cs.difficulty]}`, padding: '2px 6px' }}>
                 {cs.difficulty}
               </span>
@@ -101,7 +101,7 @@ export default function CaseStudyDetailPage() {
               {cs.tradeOffs.map(t => (
                 <div key={t.approach} style={{ border: '1px solid var(--rule)', padding: '14px 18px' }}>
                   <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.78rem', fontWeight: 600, color: 'var(--ink)', marginBottom: 8 }}>{t.approach}</div>
-                  <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+                  <div className="tradeoff-columns" style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 200 }}>
                       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.62rem', textTransform: 'uppercase', color: 'var(--terminal-green)', marginBottom: 4 }}>Pros</div>
                       {t.pros.map(p => <div key={p} style={{ fontFamily: "'Source Serif 4', serif", fontSize: '0.82rem', color: 'var(--ink-soft)', lineHeight: 1.5, paddingLeft: 12 }}>✓ {p}</div>)}

@@ -374,16 +374,18 @@ export default function AppsPage() {
           </p>
 
           {/* App selector tabs */}
-          <div style={{ display: 'flex', gap: 0, marginBottom: 32, borderBottom: '1px solid var(--rule)' }}>
+          <div className="apps-tabs" style={{ display: 'flex', gap: 0, marginBottom: 32, borderBottom: '1px solid var(--rule)', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
             {APPS.map(a => (
               <button
                 key={a.id}
                 onClick={() => setActiveApp(a.id)}
+                className="apps-tab"
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '0.72rem',
                   padding: '10px 18px',
                   border: 'none',
+                  whiteSpace: 'nowrap',
                   borderBottom: `2px solid ${activeApp === a.id ? 'var(--blueprint)' : 'transparent'}`,
                   background: 'transparent',
                   color: activeApp === a.id ? 'var(--blueprint)' : 'var(--ink-mute)',
@@ -400,7 +402,7 @@ export default function AppsPage() {
           </div>
 
           {/* App metadata */}
-          <div style={{ display: 'flex', gap: 24, marginBottom: 24, fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
+          <div className="apps-meta" style={{ display: 'flex', gap: 24, marginBottom: 24, fontFamily: "'JetBrains Mono', monospace", fontSize: '0.72rem', color: 'var(--ink-mute)' }}>
             <span>Language: <strong style={{ color: 'var(--ink)' }}>{app.language}</strong></span>
             <span>Port: <strong style={{ color: 'var(--ink)' }}>{app.port}</strong></span>
             <span>Image size: <strong style={{ color: 'var(--ink)' }}>{app.id === 'go-api' ? '~15MB' : '~180MB'}</strong></span>
