@@ -8,6 +8,7 @@ const navItems = [
   { label: 'How this works', href: '#how-it-works', id: 'how' },
   { label: 'Curriculum', href: '#curriculum', id: 'curriculum' },
   { label: 'Playground', href: '#playground', id: 'playground' },
+  { label: 'Apps', href: '/apps', id: 'apps', isRoute: true },
 ];
 
 const profColors: Record<string, string> = {
@@ -112,24 +113,46 @@ export default function Header() {
           }}
           className="header-nav"
         >
-          {navItems.map(item => (
-            <a
-              key={item.id}
-              href={isHome ? item.href : '/'}
-              className="nav-link"
-              style={{
-                color: 'var(--ink-soft)',
-                textDecoration: 'none',
-                transition: 'color 0.15s',
-                position: 'relative',
-                paddingBottom: 2,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map(item => {
+            if (item.isRoute) {
+              return (
+                <Link
+                  key={item.id}
+                  to={item.href}
+                  className="nav-link"
+                  style={{
+                    color: location.pathname.startsWith(item.href) ? 'var(--blueprint)' : 'var(--ink-soft)',
+                    textDecoration: 'none',
+                    transition: 'color 0.15s',
+                    position: 'relative',
+                    paddingBottom: 2,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+                  onMouseLeave={e => { if (!location.pathname.startsWith(item.href)) e.currentTarget.style.color = 'var(--ink-soft)'; }}
+                >
+                  {item.label}
+                </Link>
+              );
+            }
+            return (
+              <a
+                key={item.id}
+                href={isHome ? item.href : '/'}
+                className="nav-link"
+                style={{
+                  color: 'var(--ink-soft)',
+                  textDecoration: 'none',
+                  transition: 'color 0.15s',
+                  position: 'relative',
+                  paddingBottom: 2,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--blueprint)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
+              >
+                {item.label}
+              </a>
+            );
+          })}
 
           {/* Quiz nav link with proficiency badge */}
           <Link

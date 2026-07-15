@@ -79,8 +79,8 @@ export default function TOC() {
               className="phase-row"
               style={{
                 display: 'grid',
-                gridTemplateColumns: '60px 1fr 80px 100px',
-                gap: 16,
+                gridTemplateColumns: '60px 1fr 80px minmax(80px, auto)',
+                gap: 12,
                 alignItems: 'center',
                 padding: '16px 0',
                 borderBottom: '1px solid var(--rule)',

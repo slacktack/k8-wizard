@@ -7,6 +7,7 @@ import PhaseLessonsPage from './components/lesson/PhaseLessonsPage';
 import WhiteboardPage from './whiteboard/WhiteboardPage';
 import QuizHubPage from './components/quiz/QuizHubPage';
 import StandaloneQuizPage from './components/quiz/StandaloneQuizPage';
+import AppsPage from './components/apps/AppsPage';
 import CaseStudiesHubPage from './components/case-studies/CaseStudiesHubPage';
 import CaseStudyDetailPage from './components/case-studies/CaseStudyDetailPage';
 import NotFoundPage from './components/NotFoundPage';
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/phase/:phaseId" element={<PageWrapper><PhaseLessonsPage /></PageWrapper>} />
         <Route path="/lesson/:phaseId/:lessonId" element={<PageWrapper><LessonPage /></PageWrapper>} />
         <Route path="/quiz" element={<PageWrapper><QuizHubPage /></PageWrapper>} />
+        <Route path="/apps" element={<PageWrapper><AppsPage /></PageWrapper>} />
         <Route path="/quiz/:topic" element={<PageWrapper><StandaloneQuizPage /></PageWrapper>} />
         <Route path="/case-studies" element={<PageWrapper><CaseStudiesHubPage /></PageWrapper>} />
         <Route path="/case-studies/:caseStudyId" element={<PageWrapper><CaseStudyDetailPage /></PageWrapper>} />
